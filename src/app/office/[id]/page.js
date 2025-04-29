@@ -1,65 +1,86 @@
+
+
 "use client";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BiBuilding } from "react-icons/bi";
-import { useParams } from "next/navigation";
+import {
+  BiBuilding,
+  BiCalendar,
+  BiTime,
+  BiWallet,
+  BiHome,
+  BiChevronRight,
+} from "react-icons/bi";
+import { FiCheckCircle, FiAlertCircle, FiShoppingCart } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 import { useCart } from "@/lib/CartContext";
+import axios from "axios";
+import Image from "next/image";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
-const plans = {
-  monthly: [
-    { title: "Single Desk Reception Zone", price: "₹5999" },
-    { title: "Single Desk Reflection Zone", price: "₹6999" },
-    { title: "Single Desk Window Facing", price: "₹7999" },
-    { title: "3 Seater Cabin Single Row", price: "₹12000" },
-    { title: "3 Seater Cabin Window Facing", price: "₹25000" },
-    { title: "4 Seater Cabin Master Cabin", price: "₹32000" },
-  ],
-  daily: [
-    { title: "Single Desk Reception Zone", price: "₹599" },
-    { title: "Single Desk Reflection Zone", price: "₹699" },
-    { title: "Single Desk Window Facing", price: "₹799" },
-    { title: "3 Seater Cabin Single Row", price: "₹1500" },
-    { title: "3 Seater Cabin Window Facing", price: "₹1800" },
-    { title: "4 Seater Cabin Master Cabin", price: "₹2500" },
-  ],
-  hourly: [
-    { title: "Single Desk Reception Zone", price: "₹199" },
-    { title: "Single Desk Reflection Zone", price: "₹299" },
-    { title: "Single Desk Window Facing", price: "₹399" },
-    { title: "Cabin Subject to Availability", price: "₹599" },
-  ],
-};
+const officeLocations = [
+  {
+    id: "1907",
+    name: "1907 Pro-Coworking",
+    address: "Kamdhenu Commerz, Sector 14, Kharghar, Navi Mumbai",
+    image:
+      "https://visionspaces.co/wp-content/uploads/2024/04/559X373px_Boutique-office_Image-4-copy.webp",
+    amenities: [
+      "High-speed WiFi",
+      "Private Cabins",
+      "Lounge Area",
+      "Conference Rooms",
+    ],
+    operatingHours: "9 AM - 9 PM",
+  },
+  {
+    id: "1910",
+    name: "1910 Pro-Coworking",
+    address: "Kamdhenu Commerz, Sector 14, Kharghar, Navi Mumbai",
+    image:
+      "https://images.unsplash.com/photo-1666718623430-da207b018ea3?q=80&w=2110&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    amenities: [
+      "High-speed WiFi",
+      "Meeting Rooms",
+      "Coffee Bar",
+      "Printing Facility",
+    ],
+    operatingHours: "9 AM - 9 PM",
+  },
+];
 
-export default function OfficeDetailsPage() {
-  const params = useParams();
-  const { id } = params;
-
-  const [office, setOffice] = useState(null);
+export default function PlanBookingPage() {
+  const router = useRouter();
+  const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState({});
   const [showToast, setShowToast] = useState(false);
 
+  const [selectedOffice, setSelectedOffice] = useState(officeLocations[0]);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedPlan, setSelectedPlan] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
 
   const { addToCart } = useCart();
 
   useEffect(() => {
-    fetch(`http://localhost:4000/api/office/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setOffice(data);
+    const fetchPlans = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/api/plans");
+        setPlans(response.data);
         setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching office details:", error);
+      } catch (error) {
+        console.error("Error fetching plans:", error);
         setLoading(false);
-      });
-  }, [id]);
+      }
+    };
+
+    fetchPlans();
+  }, []);
 
   const convertTo12Hour = (time) => {
     if (!time) return "";
@@ -72,297 +93,620 @@ export default function OfficeDetailsPage() {
 
   const formatDate = (date) => {
     if (!date) return "";
-    const [year, month, day] = date.split("-");
-    return `${parseInt(day)}/${parseInt(month)}/${year}`;
+    return date.toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "numeric",
+      year: "numeric",
+    });
   };
 
-  const calculateTotalPrice = () => {
-    if (!selectedPlan) return 0;
-    const plan = plans[selectedCategory]?.find((p) => p.title === selectedPlan);
-    if (!plan) return 0;
-    const planPrice = parseInt(plan.price.replace("₹", ""), 10);
-    let totalPrice = 0;
+  const getBookingDays = (start, end) => {
+    if (!start || !end) return 0;
+    const timeDiff = end - start;
+    const days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1;
+    return days > 0 ? days : 1;
+  };
 
-    if (selectedCategory === "hourly" && startTime && endTime) {
-      const start = new Date(`1970-01-01T${startTime}`);
-      const end = new Date(`1970-01-01T${endTime}`);
-      const totalHours = (end - start) / (1000 * 60 * 60);
-      if (totalHours > 0) totalPrice = planPrice * totalHours;
-    } else if (selectedCategory === "daily" && startDate && endDate) {
-      const start = new Date(startDate);
-      const end = new Date(endDate);
-      const totalDays = Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
-      if (totalDays > 0) totalPrice = planPrice * totalDays;
-    } else if (selectedCategory === "monthly" && startDate && endDate) {
-      const start = new Date(startDate);
-      const end = new Date(endDate);
-      const totalDays = Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
-      if (totalDays > 31) return -1; // flag invalid monthly range
-      if (totalDays > 0) totalPrice = planPrice;
+  const calculateBookingTotal = () => {
+    if (!selectedPlan) return 0;
+
+    if (selectedCategory === "hourly") {
+      if (!startTime || !endTime) return 0;
+
+      const [startHour, startMinute] = startTime.split(":").map(Number);
+      const [endHour, endMinute] = endTime.split(":").map(Number);
+
+      const startDateObj = new Date();
+      startDateObj.setHours(startHour, startMinute);
+
+      const endDateObj = new Date();
+      endDateObj.setHours(endHour, endMinute);
+
+      // Handle overnight case
+      if (endDateObj < startDateObj) {
+        endDateObj.setDate(endDateObj.getDate() + 1);
+      }
+
+      const diffMs = endDateObj - startDateObj;
+      const hours = Math.ceil(diffMs / (1000 * 60 * 60));
+      return selectedPlan.price * hours;
     }
-    return totalPrice;
+
+    // For monthly plans, return the price directly without multiplying by days
+    if (selectedCategory === "monthly") {
+      return selectedPlan.price;
+    }
+
+    // For daily plans, calculate based on days
+    const days = getBookingDays(startDate, endDate);
+    return selectedPlan.price * days;
   };
 
   const handleAddToCart = () => {
     const newErrors = {};
     if (!selectedPlan) newErrors.selectedPlan = "Please select a plan.";
     if (!startDate) newErrors.startDate = "Start date is required.";
-    if (!endDate) newErrors.endDate = "End date is required.";
+
+    // Only require end date for daily plans
+    if (!endDate && selectedCategory === "daily")
+      newErrors.endDate = "End date is required.";
     if (!startTime && selectedCategory === "hourly")
       newErrors.startTime = "Start time is required.";
     if (!endTime && selectedCategory === "hourly")
       newErrors.endTime = "End time is required.";
+
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
-    // Date validations
     const today = new Date();
-    const start = new Date(startDate);
-    const end = new Date(endDate);
     today.setHours(0, 0, 0, 0);
+
+    const start = new Date(startDate);
     start.setHours(0, 0, 0, 0);
+
+    // For monthly plans, automatically set end date to 30 days later
+    let end = new Date(startDate);
+    if (selectedCategory === "monthly") {
+      end.setDate(end.getDate() + 30);
+      setEndDate(end);
+    } else if (selectedCategory === "daily") {
+      end = new Date(endDate);
+    } else {
+      // For hourly plans, use start date as end date
+      end = new Date(startDate);
+    }
     end.setHours(0, 0, 0, 0);
 
-    if (start < today || end < today) {
-      alert("Back date booking is not allowed.");
+    if (start < today || (end && end < today)) {
+      setShowToast({
+        type: "error",
+        message: "Back date booking is not allowed.",
+      });
+      setTimeout(() => setShowToast(false), 3000);
       return;
     }
 
-    // For monthly category, check booking period is within 30 days
+    // For monthly plans, check if duration exceeds 31 days
     if (selectedCategory === "monthly") {
-      const totalDays = Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
+      const totalDays = getBookingDays(startDate, end);
       if (totalDays > 31) {
-        alert("Monthly plans can be booked for up to 30 days only.");
+        setShowToast({
+          type: "error",
+          message: "Monthly plans can be booked for up to 30 days only.",
+        });
+        setTimeout(() => setShowToast(false), 3000);
         return;
       }
     }
 
-    // Calculate total price based on duration
-    const totalPrice = calculateTotalPrice();
-    if (
-      selectedCategory === "hourly" ||
-      selectedCategory === "daily" ||
-      selectedCategory === "monthly"
-    ) {
-      if (totalPrice <= 0) {
-        alert(
-          "Please check the time/date inputs. The booking duration must be positive."
-        );
-        return;
+    // Calculate hours for hourly plans
+    let hours = 0;
+    if (selectedCategory === "hourly") {
+      const [startHour, startMinute] = startTime.split(":").map(Number);
+      const [endHour, endMinute] = endTime.split(":").map(Number);
+
+      const startDateObj = new Date(startDate);
+      startDateObj.setHours(startHour, startMinute);
+
+      const endDateObj = new Date(startDate);
+      endDateObj.setHours(endHour, endMinute);
+
+      // Handle overnight case
+      if (endDateObj < startDateObj) {
+        endDateObj.setDate(endDateObj.getDate() + 1);
       }
-      // For monthly, -1 indicates booking period exceeds 30 days
-      if (totalPrice === -1) {
-        alert("Monthly plans can be booked for up to 30 days only.");
-        return;
-      }
+
+      const diffMs = endDateObj - startDateObj;
+      hours = Math.ceil(diffMs / (1000 * 60 * 60));
     }
+
+    const bookingDays =
+      selectedCategory === "hourly" ? 1 : getBookingDays(startDate, end);
+    const bookingHours = selectedCategory === "hourly" ? hours : null;
+
+    const bookingTotal = calculateBookingTotal();
 
     addToCart({
-      plan: `${selectedPlan} (${selectedCategory})`,
-      price: totalPrice,
+      id: `${selectedPlan._id}-${Date.now()}`,
+      plan: `${selectedPlan.title} (${selectedCategory})`,
+      location: selectedOffice.name,
+      price: bookingTotal,
+      dailyRate: selectedPlan.price,
       startDate: formatDate(startDate),
-      endDate: formatDate(endDate),
+      endDate:
+        selectedCategory === "hourly" ? formatDate(startDate) : formatDate(end),
       startTime:
         selectedCategory === "hourly" ? convertTo12Hour(startTime) : "",
       endTime: selectedCategory === "hourly" ? convertTo12Hour(endTime) : "",
+      bookingDays: bookingDays,
+      bookingHours: bookingHours,
+      image: selectedPlan.image || "/workspace-default.jpg",
     });
 
     setErrors({});
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
+    setShowToast({
+      type: "success",
+      message: "✅ Added to your cart!",
+    });
+
+    setTimeout(() => {
+      setShowToast(false);
+      router.push("/cart");
+    }, 3000);
   };
 
-  const todayStr = new Date().toISOString().split("T")[0];
-  const totalCalculatedPrice = calculateTotalPrice();
+  const bookingDays = getBookingDays(startDate, endDate);
+  const bookingTotal = calculateBookingTotal();
+
+  const filteredPlans = plans.filter(
+    (plan) => plan.category === selectedCategory
+  );
 
   if (loading)
     return (
-      <p className="text-center py-10 text-gray-500">
-        Loading office details...
-      </p>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="animate-pulse flex flex-col items-center">
+          <div className="w-16 h-16 bg-indigo-200 rounded-full mb-4"></div>
+          <div className="h-4 bg-indigo-200 rounded w-48"></div>
+        </div>
+      </div>
     );
-  if (!office)
-    return <p className="text-center text-red-500">Office not found.</p>;
 
   return (
-    <div className="max-w-7xl mx-auto p-6 sm:p-8 bg-gradient-to-br from-gray-100 to-white relative">
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
-        className="grid grid-cols-1 md:grid-cols-3 gap-8"
-      >
-        <div className="md:col-span-2 bg-white p-6 sm:p-8 shadow-xl rounded-2xl">
-          <motion.img
-            src={office.image || "/fallback.jpg"}
-            alt={office.name}
-            className="w-full h-80 object-cover rounded-xl shadow-md"
-          />
-          <h1 className="text-3xl font-bold mt-6 text-gray-800">
-            {office.name}
-          </h1>
-          <p className="text-gray-600 mt-4 text-lg">{office.description}</p>
-        </div>
-
-        <div className="bg-white p-6 sm:p-8 shadow-xl rounded-2xl">
-          <h3 className="text-2xl font-semibold mb-6 text-black">
-            🛒 Book Your Spot
-          </h3>
-
-          <label className="block mb-2 text-black font-medium">
-            Select Plan Category:
-          </label>
-          <select
-            className="w-full p-3 border border-gray-300 rounded-lg mb-4"
-            value={selectedCategory}
-            onChange={(e) => {
-              setSelectedCategory(e.target.value);
-              setSelectedPlan("");
-            }}
-          >
-            <option value="">-- Choose Category --</option>
-            <option value="monthly">Monthly</option>
-            <option value="daily">Daily</option>
-            <option value="hourly">Hourly</option>
-          </select>
-
-          {selectedCategory && (
-            <>
-              <label className="block mb-2 text-black font-medium">
-                Select Plan:
-              </label>
-              <select
-                className="w-full p-3 border border-gray-300 rounded-lg mb-2"
-                value={selectedPlan}
-                onChange={(e) => setSelectedPlan(e.target.value)}
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Breadcrumb */}
+        <nav className="flex mb-6" aria-label="Breadcrumb">
+          <ol className="inline-flex items-center space-x-1 md:space-x-3">
+            <li className="inline-flex items-center">
+              <button
+                onClick={() => router.push("/")}
+                className="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-800"
               >
-                <option value="">-- Choose Plan --</option>
-                {plans[selectedCategory].map((plan) => (
-                  <option key={plan.title} value={plan.title}>
-                    {plan.title} - {plan.price}
-                  </option>
-                ))}
-              </select>
-              {errors.selectedPlan && (
-                <p className="text-red-500 text-sm">{errors.selectedPlan}</p>
-              )}
-            </>
-          )}
+                <BiHome className="w-4 h-4 mr-2" />
+                Home
+              </button>
+            </li>
+            <li>
+              <div className="flex items-center">
+                <BiChevronRight className="w-5 h-5 text-gray-400" />
+                <span className="ml-1 text-sm font-medium text-gray-500 md:ml-2">
+                  Book Workspace
+                </span>
+              </div>
+            </li>
+          </ol>
+        </nav>
 
-          <div className="grid grid-cols-2 gap-4 mt-6">
-            <div>
-              <label className="block font-medium">Start Date</label>
-              <input
-                type="date"
-                className="w-full p-2 mt-1 border rounded-lg"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                min={todayStr}
-              />
-              {errors.startDate && (
-                <p className="text-red-500 text-sm">{errors.startDate}</p>
-              )}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+        >
+          {/* Workspace Image Section */}
+          <div className="lg:col-span-2 space-y-6">
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+              <div className="p-4 border-b">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Select Office Location
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  {officeLocations.map((office) => (
+                    <button
+                      key={office.id}
+                      onClick={() => setSelectedOffice(office)}
+                      className={`py-2 px-3 rounded-lg text-sm font-medium transition-all flex items-center ${
+                        selectedOffice.id === office.id
+                          ? "bg-indigo-600 text-white shadow-md"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      }`}
+                    >
+                      <BiBuilding className="w-4 h-4 mr-2" />
+                      {office.name.split(" ")[0]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="relative h-80 sm:h-96">
+                <Image
+                  src={selectedOffice.image}
+                  alt={selectedOffice.name}
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="(max-width: 768px) 100vw, 66vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent flex items-end p-6">
+                  <div>
+                    <h2 className="text-2xl font-bold text-white">
+                      {selectedOffice.name}
+                    </h2>
+                    <p className="text-gray-200 mt-1">
+                      {selectedOffice.address}
+                    </p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {selectedOffice.amenities.map((amenity) => (
+                        <span
+                          key={amenity}
+                          className="px-3 py-1 bg-indigo-600/80 text-white text-xs rounded-full"
+                        >
+                          {amenity}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-6 sm:p-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="flex items-center">
+                    <div className="p-3 bg-blue-50 rounded-lg mr-4">
+                      <BiBuilding className="text-blue-600 text-2xl" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-500">
+                        Address
+                      </h3>
+                      <p className="text-gray-900 font-medium">
+                        {selectedOffice.address}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="p-3 bg-purple-50 rounded-lg mr-4">
+                      <BiTime className="text-purple-600 text-2xl" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-500">
+                        Operating Hours
+                      </h3>
+                      <p className="text-gray-900 font-medium">
+                        {selectedOffice.operatingHours}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div>
-              <label className="block font-medium">End Date</label>
-              <input
-                type="date"
-                className="w-full p-2 mt-1 border rounded-lg"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                min={todayStr}
-              />
-              {errors.endDate && (
-                <p className="text-red-500 text-sm">{errors.endDate}</p>
-              )}
+
+            <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                Amenities
+              </h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                {selectedOffice.amenities.map((amenity) => (
+                  <div
+                    key={amenity}
+                    className="flex items-center p-3 bg-gray-50 rounded-lg"
+                  >
+                    <FiCheckCircle className="text-green-500 mr-2" />
+                    <span className="text-gray-700">{amenity}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
-          {selectedCategory === "hourly" && (
-            <div className="grid grid-cols-2 gap-4 mt-6">
+          {/* Booking Form Section */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 h-fit sticky top-8">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+              <BiCalendar className="text-indigo-600 mr-2" />
+              Book Your Spot
+            </h3>
+
+            <div className="space-y-6">
+              {/* Plan Category Selection */}
               <div>
-                <label className="block font-medium">Start Time</label>
-                <input
-                  type="time"
-                  className="w-full p-2 mt-1 border rounded-lg"
-                  value={startTime}
-                  onChange={(e) => setStartTime(e.target.value)}
-                />
-                {errors.startTime && (
-                  <p className="text-red-500 text-sm">{errors.startTime}</p>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Plan Category
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {["monthly", "daily", "hourly"].map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => {
+                        setSelectedCategory(category);
+                        setSelectedPlan(null);
+                        setStartDate(null);
+                        setEndDate(null);
+                        setStartTime("");
+                        setEndTime("");
+                      }}
+                      className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${
+                        selectedCategory === category
+                          ? "bg-indigo-600 text-white shadow-md"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      }`}
+                    >
+                      {category.charAt(0).toUpperCase() + category.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Plan Selection */}
+              {selectedCategory && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Select Plan
+                  </label>
+                  <select
+                    className={`w-full p-3 border ${
+                      errors.selectedPlan ? "border-red-500" : "border-gray-300"
+                    } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500`}
+                    value={selectedPlan?._id || ""}
+                    onChange={(e) => {
+                      const plan = plans.find((p) => p._id === e.target.value);
+                      setSelectedPlan(plan);
+                    }}
+                  >
+                    <option value="">-- Choose Plan --</option>
+                    {filteredPlans.map((plan) => (
+                      <option key={plan._id} value={plan._id}>
+                        {plan.title} - ₹{plan.price}
+                        {selectedCategory === "hourly"
+                          ? "/hour"
+                          : selectedCategory === "daily"
+                          ? "/day"
+                          : "/month"}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.selectedPlan && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.selectedPlan}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Date Selection */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Start Date
+                  </label>
+                  {selectedCategory === "monthly" ? (
+                    <div className="relative">
+                      <DatePicker
+                        selected={startDate}
+                        onChange={(date) => {
+                          setStartDate(date);
+                          if (date) {
+                            const endDate = new Date(date);
+                            endDate.setDate(endDate.getDate() + 30);
+                            setEndDate(endDate);
+                          }
+                        }}
+                        minDate={new Date()}
+                        dateFormat="dd/MM/yyyy"
+                        className={`w-full p-3 border ${
+                          errors.startDate
+                            ? "border-red-500"
+                            : "border-gray-300"
+                        } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500`}
+                        placeholderText="Select start date"
+                      />
+                      <BiCalendar className="absolute right-3 top-3.5 text-gray-400 pointer-events-none" />
+                    </div>
+                  ) : (
+                    <div className="relative">
+                      <DatePicker
+                        selected={startDate}
+                        onChange={(date) => setStartDate(date)}
+                        minDate={new Date()}
+                        dateFormat="dd/MM/yyyy"
+                        className={`w-full p-3 border ${
+                          errors.startDate
+                            ? "border-red-500"
+                            : "border-gray-300"
+                        } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500`}
+                        placeholderText="Select start date"
+                      />
+                      <BiCalendar className="absolute right-3 top-3.5 text-gray-400 pointer-events-none" />
+                    </div>
+                  )}
+                  {errors.startDate && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.startDate}
+                    </p>
+                  )}
+                </div>
+                {selectedCategory === "daily" && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      End Date
+                    </label>
+                    <div className="relative">
+                      <DatePicker
+                        selected={endDate}
+                        onChange={(date) => setEndDate(date)}
+                        selectsEnd
+                        startDate={startDate}
+                        endDate={endDate}
+                        minDate={startDate || new Date()}
+                        dateFormat="dd/MM/yyyy"
+                        className={`w-full p-3 border ${
+                          errors.endDate ? "border-red-500" : "border-gray-300"
+                        } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500`}
+                        placeholderText="Select end date"
+                      />
+                      <BiCalendar className="absolute right-3 top-3.5 text-gray-400 pointer-events-none" />
+                    </div>
+                    {errors.endDate && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.endDate}
+                      </p>
+                    )}
+                  </div>
                 )}
               </div>
-              <div>
-                <label className="block font-medium">End Time</label>
-                <input
-                  type="time"
-                  className="w-full p-2 mt-1 border rounded-lg"
-                  value={endTime}
-                  onChange={(e) => setEndTime(e.target.value)}
-                />
-                {errors.endTime && (
-                  <p className="text-red-500 text-sm">{errors.endTime}</p>
-                )}
-              </div>
+
+              {/* Time Selection (Hourly Only) */}
+              {selectedCategory === "hourly" && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  className="grid grid-cols-2 gap-4"
+                >
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Start Time
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="time"
+                        className={`w-full p-3 border ${
+                          errors.startTime
+                            ? "border-red-500"
+                            : "border-gray-300"
+                        } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500`}
+                        value={startTime}
+                        onChange={(e) => setStartTime(e.target.value)}
+                      />
+                      <BiTime className="absolute right-3 top-3.5 text-gray-400 pointer-events-none" />
+                    </div>
+                    {errors.startTime && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.startTime}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      End Time
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="time"
+                        className={`w-full p-3 border ${
+                          errors.endTime ? "border-red-500" : "border-gray-300"
+                        } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500`}
+                        value={endTime}
+                        onChange={(e) => setEndTime(e.target.value)}
+                      />
+                      <BiTime className="absolute right-3 top-3.5 text-gray-400 pointer-events-none" />
+                    </div>
+                    {errors.endTime && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.endTime}
+                      </p>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Booking Summary */}
+              {selectedPlan && startDate && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  transition={{ duration: 0.3 }}
+                  className="bg-indigo-50 rounded-xl p-4 border border-indigo-100"
+                >
+                  <h4 className="font-semibold text-indigo-800 mb-3 flex items-center">
+                    <BiWallet className="mr-2" />
+                    Booking Summary
+                  </h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Plan:</span>
+                      <span className="font-medium">
+                        {selectedPlan.title} ({selectedCategory})
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Rate:</span>
+                      <span className="font-medium">
+                        ₹{selectedPlan.price}
+                        {selectedCategory === "hourly"
+                          ? "/hour"
+                          : selectedCategory === "daily"
+                          ? "/day"
+                          : "/month"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Dates:</span>
+                      <span className="font-medium">
+                        {formatDate(startDate)}
+                        {selectedCategory === "daily" &&
+                          ` → ${formatDate(endDate)}`}
+                      </span>
+                    </div>
+                    {selectedCategory === "hourly" && startTime && endTime && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Time:</span>
+                        <span className="font-medium">
+                          {convertTo12Hour(startTime)} →{" "}
+                          {convertTo12Hour(endTime)}
+                        </span>
+                      </div>
+                    )}
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Duration:</span>
+                      <span className="font-medium">
+                        {selectedCategory === "hourly"
+                          ? `${bookingTotal / selectedPlan.price} hour${
+                              bookingTotal / selectedPlan.price > 1 ? "s" : ""
+                            }`
+                          : selectedCategory === "monthly"
+                          ? "1 month"
+                          : `${bookingDays} day${bookingDays > 1 ? "s" : ""}`}
+                      </span>
+                    </div>
+                    <div className="flex justify-between pt-2 mt-2 border-t border-indigo-100">
+                      <span className="text-gray-600">Total Price:</span>
+                      <span className="font-bold text-lg text-indigo-700">
+                        ₹{bookingTotal}
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Add to Cart Button */}
+              <button
+                onClick={handleAddToCart}
+                className="w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white py-3 px-6 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={
+                  !selectedPlan ||
+                  !startDate ||
+                  (selectedCategory === "daily" && !endDate) ||
+                  (selectedCategory === "hourly" && (!startTime || !endTime))
+                }
+              >
+                <FiShoppingCart className="w-5 h-5 mr-2" />
+                Add to Cart
+              </button>
             </div>
-          )}
+          </div>
+        </motion.div>
+      </div>
 
-          {selectedPlan && startDate && endDate && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className="mt-6 bg-gray-100 p-4 rounded-lg border border-gray-300"
-            >
-              <p className="text-gray-800 font-semibold mb-1">
-                Booking Summary:
-              </p>
-              <div className="text-sm text-gray-600 space-y-1">
-                <p>
-                  📝 Plan: {selectedPlan} ({selectedCategory})
-                </p>
-                <p>
-                  📅 {formatDate(startDate)} → {formatDate(endDate)}
-                </p>
-                {selectedCategory === "hourly" && startTime && endTime && (
-                  <p>
-                    ⏱️ {convertTo12Hour(startTime)} → {convertTo12Hour(endTime)}
-                  </p>
-                )}
-                {totalCalculatedPrice > 0 && (
-                  <p>💰 Total Price: ₹{totalCalculatedPrice}</p>
-                )}
-              </div>
-            </motion.div>
-          )}
-
-          <button
-            onClick={handleAddToCart}
-            className="mt-15 w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-x8 font-semibold hover:scale-105 transition-transform"
-          >
-            ➕ Add to Cart
-          </button>
-        </div>
-      </motion.div>
-
-      <motion.div
-        className="mt-12 bg-white p-6 shadow-xl rounded-2xl"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <h2 className="text-xl font-semibold flex items-center gap-2 text-gray-800 mb-3">
-          <BiBuilding /> Office Info
-        </h2>
-        <p className="text-gray-700 text-base mb-2">
-          📍 Address:{" "}
-          {office.address || "Kamdhenu Commerz, Kharghar, Navi Mumbai"}
-        </p>
-        <p className="text-gray-700 text-base">
-          ⏰ Operating Hours: {office.operatingHours || "9 AM - 9 PM"}
-        </p>
-      </motion.div>
-
+      {/* Toast Notification */}
       <AnimatePresence>
         {showToast && (
           <motion.div
@@ -370,9 +714,16 @@ export default function OfficeDetailsPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 30 }}
-            className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-full shadow-lg z-50"
+            className={`fixed bottom-6 left-1/2 transform -translate-x-1/2 ${
+              showToast.type === "success" ? "bg-green-500" : "bg-red-500"
+            } text-white px-6 py-3 rounded-full shadow-lg z-50 flex items-center`}
           >
-            ✅ Added to your cart!
+            {showToast.type === "success" ? (
+              <FiCheckCircle className="mr-2 text-xl" />
+            ) : (
+              <FiAlertCircle className="mr-2 text-xl" />
+            )}
+            {showToast.message}
           </motion.div>
         )}
       </AnimatePresence>

@@ -13,16 +13,15 @@ const ExperiencedTeam = () => {
         transition={{ duration: 0.5 }}
         className="text-3xl md:text-4xl font-bold text-center mb-4"
       >
-        Experienced Team
+        Gallery
       </motion.h2>
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2, duration: 0.5 }}
-        className="text-center text-gray-600 mb-8 max-w-2xl mx-auto"
+        className="text-center text-black mb-8 max-w-2xl mx-auto"
       >
-        Our dedicated professionals bring years of expertise to create a
-        thriving coworking space.
+        Explore our inspiring work environments
       </motion.p>
 
       {/* Team Members Grid */}
@@ -33,12 +32,12 @@ const ExperiencedTeam = () => {
         className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-6"
       >
         {[
-          "https://live.templately.com/wp-content/uploads/2020/09/1936f236-team-1.jpg",
-          "https://live.templately.com/wp-content/uploads/2020/09/f27aee20-team-5.jpg",
-          "https://live.templately.com/wp-content/uploads/2020/09/b0750fb6-team-2.jpg",
-          "https://live.templately.com/wp-content/uploads/2020/09/213c22e9-team-3.jpg",
-          "https://live.templately.com/wp-content/uploads/2020/09/e0c4be3e-team-4.jpg",
-          "https://live.templately.com/wp-content/uploads/2020/09/f27aee20-team-5.jpg",
+          "https://visionspaces.co/wp-content/uploads/2024/04/559X373px_Boutique-office_Image-6-copy.webp",
+          "https://visionspaces.co/wp-content/uploads/2024/04/559X373px_Open-Desk_Image-8-copy.webp",
+          "https://visionspaces.co/wp-content/uploads/2024/04/559X373px_Boutique-office_Image-4-copy.webp",
+          "https://visionspaces.co/wp-content/uploads/2024/04/559X373px_Open-Desk_Image-9-copy.webp",
+          "https://visionspaces.co/wp-content/uploads/2024/04/559X373px_Manager-cabin_Image-1-copy.webp",
+          "https://visionspaces.co/wp-content/uploads/2024/04/559X373px_Manager-cabin_Image-3-copy.webp",
         ].map((img, index) => (
           <motion.div
             key={index}

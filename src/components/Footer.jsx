@@ -58,7 +58,7 @@ const Footer = () => {
                 { name: "987 654 3210", href: "tel:9876543210" },
                 { name: "info@spacehub.com", href: "mailto:info@spacehub.com" },
                 {
-                  name: "1910, Kamdhenu Commerz, Sector 14, Kharghar, Navi Mumbai",
+                  name: "1910 ,Kamdhenu Commerz, Sector 14, Kharghar, Navi Mumbai",
                   href: "",
                 },
               ],

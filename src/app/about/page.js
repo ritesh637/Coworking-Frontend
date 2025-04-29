@@ -8,10 +8,9 @@ import Testimonial from "@/components/about/Testimonial";
 const About = () => {
   return (
     <div>
-      
       <Code></Code>
       <MissionSection></MissionSection>
-      
+
       <Statistics></Statistics>
       <ExperiencedTeam></ExperiencedTeam>
       <SurgeOfCreativity></SurgeOfCreativity>

@@ -27,6 +27,7 @@ const Profile = () => {
   const [errors, setErrors] = useState({
     username: "",
     phoneNumber: "",
+    gstNumber: "",
   });
   const [avatar, setAvatar] = useState(null);
   const [darkMode, setDarkMode] = useState(false);
@@ -66,6 +67,34 @@ const Profile = () => {
     fetchUserProfile();
   }, []);
 
+  const validateGST = (gstNumber) => {
+    if (!gstNumber.trim()) return true; // Skip validation if empty
+
+    // GST number should be 15 characters long
+    if (gstNumber.length !== 15) return false;
+
+    // First 2 characters should be state code (numbers)
+    const stateCode = gstNumber.substring(0, 2);
+    if (!/^\d{2}$/.test(stateCode)) return false;
+
+    // Next 10 characters should be PAN number (alphanumeric)
+    const panNumber = gstNumber.substring(2, 12);
+    if (!/^[A-Za-z0-9]{10}$/.test(panNumber)) return false;
+
+    // 13th character should be entity code (number or letter)
+    const entityCode = gstNumber[12];
+    if (!/^[A-Za-z0-9]$/.test(entityCode)) return false;
+
+    // 14th character should be Z by default
+    if (gstNumber[13] !== "Z") return false;
+
+    // Last character should be check digit (number or letter)
+    const checkDigit = gstNumber[14];
+    if (!/^[A-Za-z0-9]$/.test(checkDigit)) return false;
+
+    return true;
+  };
+
   const validateField = (name, value) => {
     let error = "";
 
@@ -84,6 +113,13 @@ const Profile = () => {
         error = "Phone number is required";
       } else if (!/^\d{10}$/.test(value)) {
         error = "Phone number must be 10 digits";
+      }
+    }
+
+    if (name === "gstNumber" && value.trim()) {
+      if (!validateGST(value)) {
+        error =
+          "Please enter a valid GST number (15 characters in format: 22ABCDE1234F1Z5)";
       }
     }
 
@@ -111,13 +147,13 @@ const Profile = () => {
     const file = e.target.files[0];
     setAvatar(URL.createObjectURL(file));
     toast.success("Avatar preview updated!");
-    // Implement upload to server logic here
   };
 
   const validateForm = () => {
     const newErrors = {
       username: validateField("username", formData.username),
       phoneNumber: validateField("phoneNumber", formData.phoneNumber),
+      gstNumber: validateField("gstNumber", formData.gstNumber),
     };
 
     setErrors(newErrors);
@@ -130,6 +166,12 @@ const Profile = () => {
 
     if (!validateForm()) {
       toast.error("Please fix the errors before submitting");
+      return;
+    }
+
+    // Additional GST validation if GST number is provided
+    if (formData.gstNumber && !validateGST(formData.gstNumber)) {
+      toast.error("Please enter a valid GST number");
       return;
     }
 
@@ -360,8 +402,9 @@ const Profile = () => {
                               field: "gstNumber",
                               label: "GST Number",
                               type: "text",
+                              placeholder: "22ABCDE1234F1Z5",
                             },
-                          ].map(({ field, label, type }) => (
+                          ].map(({ field, label, type, placeholder }) => (
                             <div key={field} className="space-y-1">
                               <label
                                 className={`block text-sm font-medium ${
@@ -375,6 +418,7 @@ const Profile = () => {
                                 name={field}
                                 value={formData[field]}
                                 onChange={handleChange}
+                                placeholder={placeholder}
                                 className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                                   darkMode
                                     ? "bg-gray-700 border-gray-600 text-white"
@@ -397,6 +441,7 @@ const Profile = () => {
                               setErrors({
                                 username: "",
                                 phoneNumber: "",
+                                gstNumber: "",
                               });
                             }}
                             className={`px-4 py-2 rounded-md font-medium ${

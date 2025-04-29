@@ -1,3 +1,34 @@
+// import React from "react";
+
+// const ImageGridWithQuote = () => {
+//   const images = [
+//     "https://images.unsplash.com/photo-1504384308090-c894fdcc538d", // Eiffel Tower
+//     " https://images.pexels.com/photos/8111359/pexels-photo-8111359.jpeg", // Street in Paris
+//     " https://images.pexels.com/photos/6248985/pexels-photo-6248985.jpeg", // Historic building
+//     " https://images.unsplash.com/photo-1527689368864-3a821dbccc34", // Cityscape
+//     "https://images.unsplash.com/photo-1568992687947-868a62a9f521", // Beautiful Canal
+//     "https://images.pexels.com/photos/7580932/pexels-photo-7580932.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+//     // Modern Architecture
+//   ];
+
+//   return (
+//     <div className="container mx-auto p-6">
+//       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+//         {images.map((src, index) => (
+//           <img
+//             key={index}
+//             src={src}
+//             alt={`Image ${index + 1}`}
+//             className="w-full h-56 object-cover rounded-md shadow-md transition-transform transform hover:scale-105"
+//           />
+//         ))}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default ImageGridWithQuote;
+
 "use client";
 
 import { useEffect, useState, useRef } from "react";
