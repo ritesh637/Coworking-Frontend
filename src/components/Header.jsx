@@ -7,16 +7,20 @@ import { BiShoppingBag } from "react-icons/bi";
 import { FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
 import { RiArrowDownSLine } from "react-icons/ri";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Header = () => {
+  const [isMounted, setIsMounted] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const { cart = [] } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { cart = [] } = useCart();
+  const pathname = usePathname();
 
   useEffect(() => {
+    setIsMounted(true);
     const checkAuth = () => {
       const token = Cookies.get("token");
       setIsAuthenticated(!!token);
@@ -52,10 +56,20 @@ const Header = () => {
     { path: "/", label: "Home" },
     { path: "/about", label: "About" },
     { path: "/booknow", label: "Locations" },
-    { path: "/workspace", label: "Workspaces" },
-    { path: "/membership", label: "Membership", highlight: true },
+    { path: "/membership", label: "Membership" },
     { path: "/contact", label: "Contact" },
   ];
+
+  const isActiveLink = (linkPath) => {
+    if (linkPath === "/") {
+      return pathname === linkPath;
+    }
+    return pathname.startsWith(linkPath);
+  };
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <header
@@ -80,8 +94,8 @@ const Header = () => {
               key={link.path}
               href={link.path}
               className={`px-3 py-1.5 rounded-lg text-sm lg:text-base transition-all duration-200 ${
-                link.highlight
-                  ? "text-blue-600 dark:text-blue-400 font-medium bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50"
+                isActiveLink(link.path)
+                  ? "text-blue-600 dark:text-blue-400 font-medium bg-blue-50 dark:bg-blue-900/30"
                   : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800"
               }`}
             >
@@ -144,14 +158,22 @@ const Header = () => {
                     </div>
                     <Link
                       href="/profile"
-                      className="block px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 transition"
+                      className={`block px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition ${
+                        isActiveLink("/profile")
+                          ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30"
+                          : "text-gray-700 dark:text-gray-200"
+                      }`}
                       onClick={() => setShowProfileMenu(false)}
                     >
                       My Profile
                     </Link>
                     <Link
                       href="/my-bookings"
-                      className="block px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 transition"
+                      className={`block px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition ${
+                        isActiveLink("/my-bookings")
+                          ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30"
+                          : "text-gray-700 dark:text-gray-200"
+                      }`}
                       onClick={() => setShowProfileMenu(false)}
                     >
                       My Bookings
@@ -172,7 +194,11 @@ const Header = () => {
             <div className="flex space-x-3">
               <Link
                 href="/login"
-                className="px-4 py-2 rounded-lg text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all duration-200 font-medium text-sm lg:text-base"
+                className={`px-4 py-2 rounded-lg transition-all duration-200 font-medium text-sm lg:text-base ${
+                  isActiveLink("/login")
+                    ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30"
+                    : "text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30"
+                }`}
               >
                 Log In
               </Link>
@@ -243,10 +269,10 @@ const Header = () => {
                       key={link.path}
                       href={link.path}
                       onClick={closeMenu}
-                      className={`block px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 ${
-                        link.highlight
+                      className={`block px-4 py-3 rounded-lg ${
+                        isActiveLink(link.path)
                           ? "text-blue-600 dark:text-blue-400 font-medium bg-blue-50 dark:bg-blue-900/30"
-                          : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                       }`}
                     >
                       {link.label}
@@ -260,14 +286,22 @@ const Header = () => {
                       <Link
                         href="/profile"
                         onClick={closeMenu}
-                        className="block px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                        className={`block px-4 py-3 rounded-lg ${
+                          isActiveLink("/profile")
+                            ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30"
+                            : "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                        }`}
                       >
                         My Profile
                       </Link>
                       <Link
                         href="/my-bookings"
                         onClick={closeMenu}
-                        className="block px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                        className={`block px-4 py-3 rounded-lg ${
+                          isActiveLink("/my-bookings")
+                            ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30"
+                            : "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                        }`}
                       >
                         My Bookings
                       </Link>
@@ -286,12 +320,16 @@ const Header = () => {
                       <Link
                         href="/login"
                         onClick={closeMenu}
-                        className="block px-4 py-3 rounded-lg text-center text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30"
+                        className={`block px-4 py-3 rounded-lg text-center ${
+                          isActiveLink("/login")
+                            ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30"
+                            : "text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30"
+                        }`}
                       >
                         Log In
                       </Link>
                       <Link
-                        href="/signup"
+                        href="/register"
                         onClick={closeMenu}
                         className="block px-4 py-3 rounded-lg bg-blue-600 text-white hover:bg-blue-700 dark:hover:bg-blue-500 text-center"
                       >

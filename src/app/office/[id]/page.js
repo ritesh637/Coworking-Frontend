@@ -1,7 +1,5 @@
-
-
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   BiBuilding,
@@ -10,8 +8,11 @@ import {
   BiWallet,
   BiHome,
   BiChevronRight,
+  BiStar,
+  BiMap,
 } from "react-icons/bi";
 import { FiCheckCircle, FiAlertCircle, FiShoppingCart } from "react-icons/fi";
+import { IoIosArrowForward } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/lib/CartContext";
 import axios from "axios";
@@ -19,45 +20,15 @@ import Image from "next/image";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const officeLocations = [
-  {
-    id: "1907",
-    name: "1907 Pro-Coworking",
-    address: "Kamdhenu Commerz, Sector 14, Kharghar, Navi Mumbai",
-    image:
-      "https://visionspaces.co/wp-content/uploads/2024/04/559X373px_Boutique-office_Image-4-copy.webp",
-    amenities: [
-      "High-speed WiFi",
-      "Private Cabins",
-      "Lounge Area",
-      "Conference Rooms",
-    ],
-    operatingHours: "9 AM - 9 PM",
-  },
-  {
-    id: "1910",
-    name: "1910 Pro-Coworking",
-    address: "Kamdhenu Commerz, Sector 14, Kharghar, Navi Mumbai",
-    image:
-      "https://images.unsplash.com/photo-1666718623430-da207b018ea3?q=80&w=2110&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    amenities: [
-      "High-speed WiFi",
-      "Meeting Rooms",
-      "Coffee Bar",
-      "Printing Facility",
-    ],
-    operatingHours: "9 AM - 9 PM",
-  },
-];
-
-export default function PlanBookingPage() {
+export default function PlanBookingPage({ params }) {
+  const { id } = use(params);
   const router = useRouter();
   const [plans, setPlans] = useState([]);
+  const [office, setOffice] = useState(null);
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState({});
   const [showToast, setShowToast] = useState(false);
 
-  const [selectedOffice, setSelectedOffice] = useState(officeLocations[0]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [startDate, setStartDate] = useState(null);
@@ -68,19 +39,29 @@ export default function PlanBookingPage() {
   const { addToCart } = useCart();
 
   useEffect(() => {
-    const fetchPlans = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/plans");
-        setPlans(response.data);
+        // Fetch office details
+        const officeRes = await axios.get(
+          `http://localhost:4000/api/office/${id}`
+        );
+        setOffice(officeRes.data);
+
+        // Fetch plans
+        const plansRes = await axios.get("http://localhost:4000/api/plans");
+        setPlans(plansRes.data);
+
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching plans:", error);
+        console.error("Error fetching data:", error);
         setLoading(false);
       }
     };
 
-    fetchPlans();
-  }, []);
+    if (id) {
+      fetchData();
+    }
+  }, [id]);
 
   const convertTo12Hour = (time) => {
     if (!time) return "";
@@ -95,7 +76,7 @@ export default function PlanBookingPage() {
     if (!date) return "";
     return date.toLocaleDateString("en-GB", {
       day: "numeric",
-      month: "numeric",
+      month: "short",
       year: "numeric",
     });
   };
@@ -146,6 +127,7 @@ export default function PlanBookingPage() {
     const newErrors = {};
     if (!selectedPlan) newErrors.selectedPlan = "Please select a plan.";
     if (!startDate) newErrors.startDate = "Start date is required.";
+    if (!office) newErrors.office = "Office details not loaded.";
 
     // Only require end date for daily plans
     if (!endDate && selectedCategory === "daily")
@@ -229,7 +211,7 @@ export default function PlanBookingPage() {
     addToCart({
       id: `${selectedPlan._id}-${Date.now()}`,
       plan: `${selectedPlan.title} (${selectedCategory})`,
-      location: selectedOffice.name,
+      location: office.name,
       price: bookingTotal,
       dailyRate: selectedPlan.price,
       startDate: formatDate(startDate),
@@ -240,7 +222,7 @@ export default function PlanBookingPage() {
       endTime: selectedCategory === "hourly" ? convertTo12Hour(endTime) : "",
       bookingDays: bookingDays,
       bookingHours: bookingHours,
-      image: selectedPlan.image || "/workspace-default.jpg",
+      image: office.image || "/workspace-default.jpg",
     });
 
     setErrors({});
@@ -262,6 +244,21 @@ export default function PlanBookingPage() {
     (plan) => plan.category === selectedCategory
   );
 
+  const amenities = [
+    { name: "High-speed Wi-Fi", emoji: "📶" },
+    { name: "Comfortable Seating", emoji: "🪑" },
+    { name: "Meeting Rooms", emoji: "👥" },
+    { name: "Private Cabins", emoji: "🚪" },
+    { name: "CCTV Surveillance", emoji: "📹" },
+    { name: "Parking Available", emoji: "🅿️" },
+    { name: "Near Metro Station", emoji: "🚇" },
+    { name: "24/7 Access", emoji: "⏰" },
+    { name: "Air Conditioning", emoji: "❄️" },
+    { name: "Printing Facilities", emoji: "🖨️" },
+    { name: "Coffee/Tea", emoji: "☕" },
+    { name: "Lounge Area", emoji: "🛋️" },
+  ];
+
   if (loading)
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -272,25 +269,44 @@ export default function PlanBookingPage() {
       </div>
     );
 
+  if (!office) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <h2 className="text-xl font-medium text-gray-700">
+            Office not found
+          </h2>
+          <button
+            onClick={() => router.push("/")}
+            className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+          >
+            Go Back Home
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Breadcrumb */}
         <nav className="flex mb-6" aria-label="Breadcrumb">
-          <ol className="inline-flex items-center space-x-1 md:space-x-3">
+          <ol className="inline-flex items-center space-x-1 md:space-x-2">
             <li className="inline-flex items-center">
               <button
                 onClick={() => router.push("/")}
-                className="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-800"
+                className="inline-flex items-center text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors"
               >
                 <BiHome className="w-4 h-4 mr-2" />
                 Home
               </button>
             </li>
+
             <li>
               <div className="flex items-center">
-                <BiChevronRight className="w-5 h-5 text-gray-400" />
-                <span className="ml-1 text-sm font-medium text-gray-500 md:ml-2">
+                <IoIosArrowForward className="w-4 h-4 text-gray-400 mx-1" />
+                <span className="ml-1 text-sm font-medium text-gray-500">
                   Book Workspace
                 </span>
               </div>
@@ -305,85 +321,110 @@ export default function PlanBookingPage() {
         >
           {/* Workspace Image Section */}
           <div className="lg:col-span-2 space-y-6">
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-              <div className="p-4 border-b">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Select Office Location
-                </label>
-                <div className="grid grid-cols-2 gap-3">
-                  {officeLocations.map((office) => (
-                    <button
-                      key={office.id}
-                      onClick={() => setSelectedOffice(office)}
-                      className={`py-2 px-3 rounded-lg text-sm font-medium transition-all flex items-center ${
-                        selectedOffice.id === office.id
-                          ? "bg-indigo-600 text-white shadow-md"
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                      }`}
-                    >
-                      <BiBuilding className="w-4 h-4 mr-2" />
-                      {office.name.split(" ")[0]}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="relative h-80 sm:h-96">
+            <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
+              <div className="relative h-80 sm:h-96 w-full">
                 <Image
-                  src={selectedOffice.image}
-                  alt={selectedOffice.name}
+                  src={office.image || "/workspace-default.jpg"}
+                  alt={office.name}
                   fill
                   className="object-cover"
                   priority
                   sizes="(max-width: 768px) 100vw, 66vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent flex items-end p-6">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end p-6">
                   <div>
                     <h2 className="text-2xl font-bold text-white">
-                      {selectedOffice.name}
+                      {office.name}
                     </h2>
-                    <p className="text-gray-200 mt-1">
-                      {selectedOffice.address}
-                    </p>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {selectedOffice.amenities.map((amenity) => (
+                    <div className="flex items-center mt-1 text-gray-200">
+                      <BiMap className="mr-1" />
+                      <p className="text-sm">{office.address}</p>
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {office.amenities?.slice(0, 5).map((amenity) => (
                         <span
                           key={amenity}
-                          className="px-3 py-1 bg-indigo-600/80 text-white text-xs rounded-full"
+                          className="px-2.5 py-1 bg-white/20 backdrop-blur-sm text-white text-xs rounded-full"
                         >
                           {amenity}
                         </span>
                       ))}
+                      {office.amenities?.length > 5 && (
+                        <span className="px-2.5 py-1 bg-white/20 backdrop-blur-sm text-white text-xs rounded-full">
+                          +{office.amenities.length - 5} more
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="p-6 sm:p-8">
+              <div className="p-6">
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  About this workspace
+                </h3>
+                <p className="text-gray-600 mb-6">
+                  {office.description ||
+                    "This premium workspace offers a professional environment with all the amenities you need to be productive. Enjoy high-speed internet, comfortable seating, and access to meeting rooms when you need them."}
+                </p>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="flex items-center">
-                    <div className="p-3 bg-blue-50 rounded-lg mr-4">
-                      <BiBuilding className="text-blue-600 text-2xl" />
+                  <div className="flex items-start">
+                    <div className="p-2.5 bg-blue-50 rounded-lg mr-3 text-blue-600">
+                      <BiBuilding className="text-xl" />
                     </div>
                     <div>
                       <h3 className="text-sm font-medium text-gray-500">
-                        Address
+                        Address:
+                        <p className="text-gray-900 font-medium">
+                          Kamdhenu Commerz, Sector 14, Kharghar, Navi Mumbai{" "}
+                        </p>
                       </h3>
                       <p className="text-gray-900 font-medium">
-                        {selectedOffice.address}
+                        {office.address}
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center">
-                    <div className="p-3 bg-purple-50 rounded-lg mr-4">
-                      <BiTime className="text-purple-600 text-2xl" />
+                  <div className="flex items-start">
+                    <div className="p-2.5 bg-purple-50 rounded-lg mr-3 text-purple-600">
+                      <BiTime className="text-xl" />
                     </div>
                     <div>
                       <h3 className="text-sm font-medium text-gray-500">
                         Operating Hours
                       </h3>
                       <p className="text-gray-900 font-medium">
-                        {selectedOffice.operatingHours}
+                        {office.operatingHours || "9 AM - 9 PM"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="p-2.5 bg-green-50 rounded-lg mr-3 text-green-600">
+                      <BiStar className="text-xl" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-500">
+                        Rating
+                      </h3>
+                      <p className="text-gray-900 font-medium">
+                        {office.rating || "4.8"} (120 reviews)
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="p-2.5 bg-orange-50 rounded-lg mr-3 text-orange-600">
+                      <BiWallet className="text-xl" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-500">
+                        Starting From
+                      </h3>
+                      <p className="text-gray-900 font-medium">
+                        ₹
+                        {plans.length > 0
+                          ? Math.min(...plans.map((p) => p.price))
+                          : "--"}
+                        /hour
                       </p>
                     </div>
                   </div>
@@ -391,28 +432,204 @@ export default function PlanBookingPage() {
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                Amenities
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+              <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+                <span className="mr-2">🏢</span>
+                Amenities & Facilities
               </h2>
+
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                {selectedOffice.amenities.map((amenity) => (
+                {amenities.map((amenity) => (
                   <div
-                    key={amenity}
-                    className="flex items-center p-3 bg-gray-50 rounded-lg"
+                    key={amenity.name}
+                    className="flex items-center p-3 bg-gray-50 rounded-lg border border-gray-100 hover:bg-indigo-50 transition-colors"
                   >
-                    <FiCheckCircle className="text-green-500 mr-2" />
-                    <span className="text-gray-700">{amenity}</span>
+                    <span className="text-lg mr-2">{amenity.emoji}</span>
+                    <span className="text-gray-700 text-sm truncate">
+                      {amenity.name}
+                    </span>
                   </div>
                 ))}
+              </div>
+            </div>
+
+            {/* Pricing Plans Section */}
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+              <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+                <span className="mr-2">💰</span>
+                Pricing Plans
+              </h2>
+
+              <div className="space-y-8">
+                {/* Hourly Plans */}
+                <div>
+                  <h3 className="text-lg font-medium text-black mb-3 flex items-center">
+                    <span className="mr-2">⏱️</span>
+                    Hourly Plans
+                  </h3>
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider"
+                          >
+                            Plan
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider"
+                          >
+                            Price
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {plans
+                          .filter((plan) => plan.category === "hourly")
+                          .map((plan) => (
+                            <tr key={plan._id} className="hover:bg-gray-50">
+                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
+                                {plan.title}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                                ₹{plan.price}/hour
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                                <div className="flex flex-wrap gap-1">
+                                  {plan.features?.map((feature, i) => (
+                                    <span
+                                      key={i}
+                                      className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
+                                    >
+                                      {feature}
+                                    </span>
+                                  ))}
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* Daily Plans */}
+                <div>
+                  <h3 className="text-lg font-medium text-black mb-3 flex items-center">
+                    <span className="mr-2">📅</span>
+                    Daily Plans
+                  </h3>
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider"
+                          >
+                            Plan
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider"
+                          >
+                            Price
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {plans
+                          .filter((plan) => plan.category === "daily")
+                          .map((plan) => (
+                            <tr key={plan._id} className="hover:bg-gray-50">
+                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
+                                {plan.title}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                                ₹{plan.price}/day
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                                <div className="flex flex-wrap gap-1">
+                                  {plan.features?.map((feature, i) => (
+                                    <span
+                                      key={i}
+                                      className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full"
+                                    >
+                                      {feature}
+                                    </span>
+                                  ))}
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* Monthly Plans */}
+                <div>
+                  <h3 className="text-lg font-medium text-gray-800 mb-3 flex items-center">
+                    <span className="mr-2">🏢</span>
+                    Monthly Plans
+                  </h3>
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider"
+                          >
+                            Plan
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider"
+                          >
+                            Price
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {plans
+                          .filter((plan) => plan.category === "monthly")
+                          .map((plan) => (
+                            <tr key={plan._id} className="hover:bg-gray-50">
+                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
+                                {plan.title}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                                ₹{plan.price}/month
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                                <div className="flex flex-wrap gap-1">
+                                  {plan.features?.map((feature, i) => (
+                                    <span
+                                      key={i}
+                                      className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full"
+                                    >
+                                      {feature}
+                                    </span>
+                                  ))}
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Booking Form Section */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 h-fit sticky top-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-              <BiCalendar className="text-indigo-600 mr-2" />
+          <div className="bg-white rounded-xl shadow-sm p-6 h-fit sticky top-8 border border-gray-100">
+            <h3 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+              <span className="mr-2">📅</span>
               Book Your Spot
             </h3>
 
@@ -423,153 +640,212 @@ export default function PlanBookingPage() {
                   Plan Category
                 </label>
                 <div className="grid grid-cols-3 gap-2">
-                  {["monthly", "daily", "hourly"].map((category) => (
+                  {[
+                    { value: "hourly", emoji: "", label: "Hourly" },
+                    { value: "daily", emoji: "", label: "Daily" },
+                    { value: "monthly", emoji: "", label: "Monthly" },
+                  ].map((category) => (
                     <button
-                      key={category}
+                      key={category.value}
                       onClick={() => {
-                        setSelectedCategory(category);
+                        setSelectedCategory(category.value);
                         setSelectedPlan(null);
                         setStartDate(null);
                         setEndDate(null);
                         setStartTime("");
                         setEndTime("");
+                        setErrors({}); // Clear errors when changing category
                       }}
-                      className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${
-                        selectedCategory === category
+                      className={`py-2 px-2 rounded-lg text-sm font-medium transition-all flex items-center justify-center ${
+                        selectedCategory === category.value
                           ? "bg-indigo-600 text-white shadow-md"
                           : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                       }`}
                     >
-                      {category.charAt(0).toUpperCase() + category.slice(1)}
+                      <span className="mr-1">{category.emoji}</span>
+                      {category.label}
                     </button>
                   ))}
                 </div>
+                {errors.selectedCategory && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.selectedCategory}
+                  </p>
+                )}
               </div>
 
               {/* Plan Selection */}
-              {selectedCategory && (
+              {selectedCategory ? (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Select Plan
                   </label>
-                  <select
-                    className={`w-full p-3 border ${
-                      errors.selectedPlan ? "border-red-500" : "border-gray-300"
-                    } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500`}
-                    value={selectedPlan?._id || ""}
-                    onChange={(e) => {
-                      const plan = plans.find((p) => p._id === e.target.value);
-                      setSelectedPlan(plan);
-                    }}
-                  >
-                    <option value="">-- Choose Plan --</option>
-                    {filteredPlans.map((plan) => (
-                      <option key={plan._id} value={plan._id}>
-                        {plan.title} - ₹{plan.price}
-                        {selectedCategory === "hourly"
-                          ? "/hour"
-                          : selectedCategory === "daily"
-                          ? "/day"
-                          : "/month"}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="relative">
+                    <select
+                      className={`w-full p-3 border ${
+                        errors.selectedPlan
+                          ? "border-red-500"
+                          : "border-gray-300"
+                      } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 appearance-none`}
+                      value={selectedPlan?._id || ""}
+                      onChange={(e) => {
+                        const plan = plans.find(
+                          (p) => p._id === e.target.value
+                        );
+                        setSelectedPlan(plan);
+                        if (errors.selectedPlan) {
+                          setErrors({ ...errors, selectedPlan: undefined });
+                        }
+                      }}
+                    >
+                      <option value="">-- Choose Plan --</option>
+                      {filteredPlans.map((plan) => (
+                        <option key={plan._id} value={plan._id}>
+                          {plan.title} - ₹{plan.price.toLocaleString()}
+                          {selectedCategory === "hourly"
+                            ? "/hour"
+                            : selectedCategory === "daily"
+                            ? "/day"
+                            : "/month"}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                      <svg
+                        className="w-5 h-5 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </div>
+                  </div>
                   {errors.selectedPlan && (
                     <p className="mt-1 text-sm text-red-600">
                       {errors.selectedPlan}
                     </p>
                   )}
                 </div>
+              ) : (
+                errors.selectedCategory && (
+                  <p className="text-sm text-red-600">
+                    Please select a plan category first
+                  </p>
+                )
               )}
 
               {/* Date Selection */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Start Date
-                  </label>
-                  {selectedCategory === "monthly" ? (
-                    <div className="relative">
-                      <DatePicker
-                        selected={startDate}
-                        onChange={(date) => {
-                          setStartDate(date);
-                          if (date) {
-                            const endDate = new Date(date);
-                            endDate.setDate(endDate.getDate() + 30);
-                            setEndDate(endDate);
-                          }
-                        }}
-                        minDate={new Date()}
-                        dateFormat="dd/MM/yyyy"
-                        className={`w-full p-3 border ${
-                          errors.startDate
-                            ? "border-red-500"
-                            : "border-gray-300"
-                        } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500`}
-                        placeholderText="Select start date"
-                      />
-                      <BiCalendar className="absolute right-3 top-3.5 text-gray-400 pointer-events-none" />
-                    </div>
-                  ) : (
-                    <div className="relative">
-                      <DatePicker
-                        selected={startDate}
-                        onChange={(date) => setStartDate(date)}
-                        minDate={new Date()}
-                        dateFormat="dd/MM/yyyy"
-                        className={`w-full p-3 border ${
-                          errors.startDate
-                            ? "border-red-500"
-                            : "border-gray-300"
-                        } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500`}
-                        placeholderText="Select start date"
-                      />
-                      <BiCalendar className="absolute right-3 top-3.5 text-gray-400 pointer-events-none" />
-                    </div>
-                  )}
-                  {errors.startDate && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {errors.startDate}
-                    </p>
-                  )}
-                </div>
-                {selectedCategory === "daily" && (
+              {selectedPlan && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      End Date
+                      Start Date
                     </label>
-                    <div className="relative">
-                      <DatePicker
-                        selected={endDate}
-                        onChange={(date) => setEndDate(date)}
-                        selectsEnd
-                        startDate={startDate}
-                        endDate={endDate}
-                        minDate={startDate || new Date()}
-                        dateFormat="dd/MM/yyyy"
-                        className={`w-full p-3 border ${
-                          errors.endDate ? "border-red-500" : "border-gray-300"
-                        } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500`}
-                        placeholderText="Select end date"
-                      />
-                      <BiCalendar className="absolute right-3 top-3.5 text-gray-400 pointer-events-none" />
-                    </div>
-                    {errors.endDate && (
+                    {selectedCategory === "monthly" ? (
+                      <div className="relative">
+                        <DatePicker
+                          selected={startDate}
+                          onChange={(date) => {
+                            setStartDate(date);
+                            if (errors.startDate) {
+                              setErrors({ ...errors, startDate: undefined });
+                            }
+                            if (date) {
+                              const endDate = new Date(date);
+                              endDate.setDate(endDate.getDate() + 30);
+                              setEndDate(endDate);
+                            }
+                          }}
+                          minDate={new Date()}
+                          dateFormat="dd MMM yyyy"
+                          className={`w-full p-3 border ${
+                            errors.startDate
+                              ? "border-red-500"
+                              : "border-gray-300"
+                          } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 pr-10`}
+                          placeholderText="Select date"
+                        />
+                        <BiCalendar className="absolute right-3 top-3.5 text-gray-400 pointer-events-none" />
+                      </div>
+                    ) : (
+                      <div className="relative">
+                        <DatePicker
+                          selected={startDate}
+                          onChange={(date) => {
+                            setStartDate(date);
+                            if (errors.startDate) {
+                              setErrors({ ...errors, startDate: undefined });
+                            }
+                          }}
+                          minDate={new Date()}
+                          dateFormat="dd MMM yyyy"
+                          className={`w-full p-3 border ${
+                            errors.startDate
+                              ? "border-red-500"
+                              : "border-gray-300"
+                          } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 pr-10`}
+                          placeholderText="Select date"
+                        />
+                        <BiCalendar className="absolute right-3 top-3.5 text-gray-400 pointer-events-none" />
+                      </div>
+                    )}
+                    {errors.startDate && (
                       <p className="mt-1 text-sm text-red-600">
-                        {errors.endDate}
+                        {errors.startDate}
                       </p>
                     )}
                   </div>
-                )}
-              </div>
+                  {selectedCategory === "daily" && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        End Date
+                      </label>
+                      <div className="relative">
+                        <DatePicker
+                          selected={endDate}
+                          onChange={(date) => {
+                            setEndDate(date);
+                            if (errors.endDate) {
+                              setErrors({ ...errors, endDate: undefined });
+                            }
+                          }}
+                          selectsEnd
+                          startDate={startDate}
+                          endDate={endDate}
+                          minDate={startDate || new Date()}
+                          dateFormat="dd MMM yyyy"
+                          className={`w-full p-3 border ${
+                            errors.endDate
+                              ? "border-red-500"
+                              : "border-gray-300"
+                          } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 pr-10`}
+                          placeholderText="Select date"
+                        />
+                        <BiCalendar className="absolute right-3 top-3.5 text-gray-400 pointer-events-none" />
+                      </div>
+                      {errors.endDate && (
+                        <p className="mt-1 text-sm text-red-600">
+                          {errors.endDate}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Time Selection (Hourly Only) */}
-              {selectedCategory === "hourly" && (
+              {selectedCategory === "hourly" && selectedPlan && (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
-                  className="grid grid-cols-2 gap-4"
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-4"
                 >
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -584,7 +860,12 @@ export default function PlanBookingPage() {
                             : "border-gray-300"
                         } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500`}
                         value={startTime}
-                        onChange={(e) => setStartTime(e.target.value)}
+                        onChange={(e) => {
+                          setStartTime(e.target.value);
+                          if (errors.startTime) {
+                            setErrors({ ...errors, startTime: undefined });
+                          }
+                        }}
                       />
                       <BiTime className="absolute right-3 top-3.5 text-gray-400 pointer-events-none" />
                     </div>
@@ -605,7 +886,12 @@ export default function PlanBookingPage() {
                           errors.endTime ? "border-red-500" : "border-gray-300"
                         } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500`}
                         value={endTime}
-                        onChange={(e) => setEndTime(e.target.value)}
+                        onChange={(e) => {
+                          setEndTime(e.target.value);
+                          if (errors.endTime) {
+                            setErrors({ ...errors, endTime: undefined });
+                          }
+                        }}
                       />
                       <BiTime className="absolute right-3 top-3.5 text-gray-400 pointer-events-none" />
                     </div>
@@ -627,7 +913,7 @@ export default function PlanBookingPage() {
                   className="bg-indigo-50 rounded-xl p-4 border border-indigo-100"
                 >
                   <h4 className="font-semibold text-indigo-800 mb-3 flex items-center">
-                    <BiWallet className="mr-2" />
+                    <span className="mr-2">💰</span>
                     Booking Summary
                   </h4>
                   <div className="space-y-2 text-sm">
@@ -640,7 +926,7 @@ export default function PlanBookingPage() {
                     <div className="flex justify-between">
                       <span className="text-gray-600">Rate:</span>
                       <span className="font-medium">
-                        ₹{selectedPlan.price}
+                        ₹{selectedPlan.price.toLocaleString()}
                         {selectedCategory === "hourly"
                           ? "/hour"
                           : selectedCategory === "daily"
@@ -678,9 +964,11 @@ export default function PlanBookingPage() {
                       </span>
                     </div>
                     <div className="flex justify-between pt-2 mt-2 border-t border-indigo-100">
-                      <span className="text-gray-600">Total Price:</span>
+                      <span className="text-gray-600 font-semibold">
+                        Total Price:
+                      </span>
                       <span className="font-bold text-lg text-indigo-700">
-                        ₹{bookingTotal}
+                        ₹{bookingTotal.toLocaleString()}
                       </span>
                     </div>
                   </div>
@@ -694,6 +982,7 @@ export default function PlanBookingPage() {
                 disabled={
                   !selectedPlan ||
                   !startDate ||
+                  !office ||
                   (selectedCategory === "daily" && !endDate) ||
                   (selectedCategory === "hourly" && (!startTime || !endTime))
                 }
@@ -716,14 +1005,14 @@ export default function PlanBookingPage() {
             exit={{ opacity: 0, y: 30 }}
             className={`fixed bottom-6 left-1/2 transform -translate-x-1/2 ${
               showToast.type === "success" ? "bg-green-500" : "bg-red-500"
-            } text-white px-6 py-3 rounded-full shadow-lg z-50 flex items-center`}
+            } text-white px-6 py-3 rounded-full shadow-lg z-50 flex items-center max-w-xs sm:max-w-sm`}
           >
             {showToast.type === "success" ? (
-              <FiCheckCircle className="mr-2 text-xl" />
+              <FiCheckCircle className="mr-2 text-xl flex-shrink-0" />
             ) : (
-              <FiAlertCircle className="mr-2 text-xl" />
+              <FiAlertCircle className="mr-2 text-xl flex-shrink-0" />
             )}
-            {showToast.message}
+            <span className="truncate">{showToast.message}</span>
           </motion.div>
         )}
       </AnimatePresence>
