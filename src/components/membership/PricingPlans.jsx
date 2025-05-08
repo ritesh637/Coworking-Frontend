@@ -3,12 +3,13 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import {BASE_URL} from "@/lib/config"
 
 const quotes = [
-  "Join Our Membership",
-  "Unlock Your Productivity With Us",
-  "Your Workspace, Your Rules",
-  "Affordable Plans, Premium Experience",
+  "ᴊᴏɪɴ ᴏᴜʀ ᴍᴇᴍʙᴇʀꜱʜɪᴘ",
+  "ᴜɴʟᴏᴄᴋ ʏᴏᴜʀ ᴘʀᴏᴅᴜᴄᴛɪᴠɪᴛʏ ᴡɪᴛʜ ᴜꜱ",
+  "ʏᴏᴜʀ ᴡᴏʀᴋꜱᴘᴀᴄᴇ, ʏᴏᴜʀ ʀᴜʟᴇꜱ",
+  "ᴀꜰꜰᴏʀᴅᴀʙʟᴇ ᴘʟᴀɴꜱ, ᴘʀᴇᴍɪᴜᴍ ᴇxᴘᴇʀɪᴇɴᴄᴇ",
 ];
 
 const PricingPlans = () => {
@@ -26,7 +27,7 @@ const PricingPlans = () => {
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const res = await fetch("http://localhost:4000/api/pricing-plans");
+        const res = await fetch(`${BASE_URL}/pricing-plans`);
         const data = await res.json();
         setPlans(data);
       } catch (error) {
@@ -56,7 +57,7 @@ const PricingPlans = () => {
           </motion.h2>
         </AnimatePresence>
         <p className="mt-4 text-gray-600 dark:text-gray-300 max-w-xl mx-auto">
-          Choose the plan that fits your business and work style.
+        ᴄʜᴏᴏꜱᴇ ᴛʜᴇ ᴘʟᴀɴ ᴛʜᴀᴛ ꜰɪᴛꜱ ʏᴏᴜʀ ʙᴜꜱɪɴᴇꜱꜱ ᴀɴᴅ ᴡᴏʀᴋ ꜱᴛʏʟᴇ.
         </p>
       </div>
 
@@ -93,7 +94,7 @@ const PricingPlans = () => {
                 {plan.name}
               </h3>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                Perfect for teams
+              ᴘᴇʀꜰᴇᴄᴛ ꜰᴏʀ ᴛᴇᴀᴍꜱ
               </p>
               <ul className="text-gray-700 dark:text-gray-300 space-y-3 mb-6">
                 {plan.features.map((feature, i) => (
@@ -110,7 +111,7 @@ const PricingPlans = () => {
                 onClick={() => (window.location.href = "/booknow")}
                 className="w-full bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-transform duration-300 hover:scale-105"
               >
-                Book Now
+               ʙᴏᴏᴋ ɴᴏᴡ
               </button>
             </motion.div>
           ))}

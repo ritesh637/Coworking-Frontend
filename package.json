@@ -11,8 +11,9 @@
   "dependencies": {
     "@headlessui/react": "^2.2.2",
     "@heroicons/react": "^2.2.0",
+    "@hookform/resolvers": "^5.0.1",
     "date-fns": "^4.1.0",
-    "framer-motion": "^12.7.4",
+    "framer-motion": "^12.10.2",
     "html2pdf.js": "^0.10.3",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
@@ -27,14 +28,17 @@
     "react": "^18.3.1",
     "react-datepicker": "^8.3.0",
     "react-dom": "^18.3.1",
-    "react-hook-form": "^7.56.0",
+    "react-hook-form": "^7.56.2",
     "react-hot-toast": "^2.5.2",
     "react-icons": "^5.5.0",
+    "react-intersection-observer": "^9.16.0",
     "react-loading-skeleton": "^3.5.0",
+    "react-phone-number-input": "^3.4.12",
     "react-spinners": "^0.16.1",
     "react-toastify": "^11.0.5",
     "react-type-animation": "^3.2.0",
-    "swiper": "^11.2.6"
+    "swiper": "^11.2.6",
+    "zod": "^3.24.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

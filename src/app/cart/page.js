@@ -245,7 +245,7 @@ const CartPage = () => {
           className="text-center mb-10"
         >
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
-            Your Shopping Cart
+            ʏᴏᴜʀ ꜱʜᴏᴘᴘɪɴɢ ᴄᴀʀᴛ
           </h1>
           <p className="text-gray-600">
             {cart.length} {cart.length === 1 ? "item" : "items"} in your cart
@@ -261,16 +261,16 @@ const CartPage = () => {
           >
             <AiOutlineShoppingCart className="text-6xl sm:text-8xl text-gray-300 mb-6" />
             <h3 className="text-xl sm:text-2xl font-medium text-gray-700 mb-2">
-              Your cart is empty
+              ʏᴏᴜʀ ᴄᴀʀᴛ ɪꜱ ᴇᴍᴘᴛʏ
             </h3>
             <p className="text-gray-500 mb-6 max-w-md text-center">
-              Looks like you haven't added anything to your cart yet.
+              ʟᴏᴏᴋꜱ ʟɪᴋᴇ ʏᴏᴜ ʜᴀᴠᴇɴ'ᴛ ᴀᴅᴅᴇᴅ ᴀɴʏᴛʜɪɴɢ ᴛᴏ ʏᴏᴜʀ ᴄᴀʀᴛ ʏᴇᴛ.
             </p>
             <a
               href="/"
               className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
-              Browse Spaces <FiArrowRight />
+              ʙʀᴏᴡꜱᴇ ꜱᴘᴀᴄᴇꜱ <FiArrowRight />
             </a>
           </motion.div>
         ) : (
@@ -355,7 +355,7 @@ const CartPage = () => {
                 className="bg-white p-6 rounded-xl shadow-sm border border-gray-100"
               >
                 <h3 className="text-xl font-bold text-gray-800 mb-4 pb-2 border-b border-gray-200">
-                  Order Summary
+                  ᴏʀᴅᴇʀ ꜱᴜᴍᴍᴀʀʏ
                 </h3>
 
                 <div className="space-y-3 mb-4">
@@ -405,7 +405,7 @@ const CartPage = () => {
                     htmlFor="promo-code"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    Promo Code
+                    ᴘʀᴏᴍᴏ ᴄᴏᴅᴇ
                   </label>
                   <div className="flex gap-2">
                     <input
@@ -420,7 +420,7 @@ const CartPage = () => {
                       onClick={handleApplyPromo}
                       className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors whitespace-nowrap"
                     >
-                      Apply
+                      ᴀᴘᴘʟʏ
                     </button>
                   </div>
                 </div>
@@ -431,7 +431,7 @@ const CartPage = () => {
                     htmlFor="gst-number"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    GST Number (Optional)
+                    ɢꜱᴛ ɴᴜᴍʙᴇʀ (ᴏᴘᴛɪᴏɴᴀʟ)
                   </label>
                   <input
                     type="text"

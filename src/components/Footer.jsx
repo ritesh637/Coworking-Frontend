@@ -15,7 +15,7 @@ const Footer = () => {
               className="w-40 mb-4 hover:scale-110 transition-transform duration-300"
             />
             <p className="text-gray-600 text-xs text-center md:text-left">
-              Explore the future of innovation with Space Hub.
+              𝗘𝘅𝗽𝗹𝗼𝗿𝗲 𝘁𝗵𝗲 𝗳𝘂𝘁𝘂𝗿𝗲 𝗼𝗳 𝗶𝗻𝗻𝗼𝘃𝗮𝘁𝗶𝗼𝗻 𝘄𝗶𝘁𝗵 𝗦𝗽𝗮𝗰𝗲 𝗛𝘂𝗯.
             </p>
             <div className="flex space-x-3 mt-5 justify-center md:justify-start">
               {[
@@ -37,28 +37,28 @@ const Footer = () => {
           {/* Links Sections */}
           {[
             {
-              title: "Quick Links",
+              title: "Qᴜɪᴄᴋ ʟɪɴᴋꜱ",
               links: [
-                { name: "Home", href: "/" },
-                { name: "About", href: "/about" },
-                { name: "Workspace", href: "/workspace" },
+                { name: "ʜᴏᴍᴇ", href: "/" },
+                { name: "ᴀʙᴏᴜᴛ", href: "/about" },
+                { name: "ᴡᴏʀᴋꜱᴘᴀᴄᴇ", href: "/about" },
               ],
             },
             {
-              title: "Support",
+              title: "ꜱᴜᴘᴘᴏʀᴛ",
               links: [
-                { name: "FAQ", href: "/faq" },
-                { name: "Privacy Policy", href: "/privacy" },
-                { name: "Terms & Conditions", href: "/term" },
+                { name: "ꜰᴀQ", href: "/faq" },
+                { name: "ᴘʀɪᴠᴀᴄʏ ᴘᴏʟɪᴄʏ", href: "/privacy" },
+                { name: "ᴛᴇʀᴍꜱ & ᴄᴏɴᴅɪᴛɪᴏɴꜱ", href: "/term" },
               ],
             },
             {
-              title: "Contact",
+              title: "ᴄᴏɴᴛᴀᴄᴛ",
               links: [
-                { name: "987 654 3210", href: "tel:9876543210" },
-                { name: "info@spacehub.com", href: "mailto:info@spacehub.com" },
+                { name: "+91 7707076831", href: "tel:7707076831" },
+                { name: "ᴍɴᴇꜱʜᴋ480@ɢᴍᴀɪʟ.ᴄᴏᴍ", href: "mailto:ᴍɴᴇꜱʜᴋ480@ɢᴍᴀɪʟ.ᴄᴏᴍ" },
                 {
-                  name: "1910 ,Kamdhenu Commerz, Sector 14, Kharghar, Navi Mumbai",
+                  name: "1907 - 1910  ᴋᴀᴍᴅʜᴇɴᴜ ᴄᴏᴍᴍᴇʀᴢ, ꜱᴇᴄᴛᴏʀ 14 ᴋʜᴀʀɢʜᴀʀ, ɴᴀᴠɪ ᴍᴜᴍʙᴀɪ",
                   href: "",
                 },
               ],
@@ -84,8 +84,8 @@ const Footer = () => {
         </div>
 
         {/* Copyright */}
-        <div className="border-t border-gray-200 mt-12 pt-4 text-center text-xs text-gray-500">
-          <p>© 2025 Space Hub. All rights reserved.</p>
+        <div className="border-t border-gray-200 mt-12 pt-4 text-center text-xs text-black">
+          <p>© 2025 ꜱᴘᴀᴄᴇ ʜᴜʙ. ᴀʟʟ ʀɪɢʜᴛꜱ ʀᴇꜱᴇʀᴠᴇᴅ.</p>
         </div>
       </div>
     </footer>

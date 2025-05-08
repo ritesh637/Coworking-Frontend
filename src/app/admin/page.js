@@ -15,6 +15,7 @@ import {
   FiArrowLeft,
 } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
+import { BASE_URL } from "@/lib/config";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("pricing");
@@ -132,7 +133,7 @@ const AdminDashboard = () => {
       let response;
       if (editingId) {
         response = await axios.put(
-          `http://localhost:4000/api/pricing-plans/${editingId}`,
+          `${BASE_URL}/pricing-plans/${editingId}`,
           payload,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -144,7 +145,7 @@ const AdminDashboard = () => {
         );
       } else {
         response = await axios.post(
-          "http://localhost:4000/api/pricing-plans",
+          `${BASE_URL}/pricing-plans`,
           payload,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -180,7 +181,7 @@ const AdminDashboard = () => {
 
     const token = Cookies.get("token");
     try {
-      await axios.delete(`http://localhost:4000/api/pricing-plans/${id}`, {
+      await axios.delete(`${BASE_URL}/pricing-plans/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Plan deleted successfully!");

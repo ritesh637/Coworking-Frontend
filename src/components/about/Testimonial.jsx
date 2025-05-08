@@ -9,19 +9,19 @@ import "swiper/css/pagination";
 
 const testimonials = [
   {
-    text: "I have been using SpaceHub for a month now and I can't fault it. It's in a great location and the broadband is super fast. There is free tea, coffee, and refreshments. The meeting room is a perfect size and easy to book. I would highly recommend.",
-    name: "Mario Speedwagon",
-    position: "Senior Art Director",
+    text: "ɪ ʜᴀᴠᴇ ʙᴇᴇɴ ᴜꜱɪɴɢ ꜱᴘᴀᴄᴇʜᴜʙ ꜰᴏʀ ᴀ ᴍᴏɴᴛʜ ɴᴏᴡ ᴀɴᴅ ɪ ᴄᴀɴ'ᴛ ꜰᴀᴜʟᴛ ɪᴛ. ɪᴛ'ꜱ ɪɴ ᴀ ɢʀᴇᴀᴛ ʟᴏᴄᴀᴛɪᴏɴ ᴀɴᴅ ᴛʜᴇ ʙʀᴏᴀᴅʙᴀɴᴅ ɪꜱ ꜱᴜᴘᴇʀ ꜰᴀꜱᴛ. ᴛʜᴇʀᴇ ɪꜱ ꜰʀᴇᴇ ᴛᴇᴀ, ᴄᴏꜰꜰᴇᴇ, ᴀɴᴅ ʀᴇꜰʀᴇꜱʜᴍᴇɴᴛꜱ. ᴛʜᴇ ᴍᴇᴇᴛɪɴɢ ʀᴏᴏᴍ ɪꜱ ᴀ ᴘᴇʀꜰᴇᴄᴛ ꜱɪᴢᴇ ᴀɴᴅ ᴇᴀꜱʏ ᴛᴏ ʙᴏᴏᴋ. ɪ ᴡᴏᴜʟᴅ ʜɪɢʜʟʏ ʀᴇᴄᴏᴍᴍᴇɴᴅ.",
+    name: "ᴍᴀʀɪᴏ ꜱᴘᴇᴇᴅᴡᴀɢᴏɴ",
+    position: "ꜱᴇɴɪᴏʀ ᴀʀᴛ ᴅɪʀᴇᴄᴛᴏʀ",
   },
   {
-    text: "Amazing coworking space with a vibrant community. The atmosphere is great for productivity, and the internet speed is top-notch!",
-    name: "Sarah Johnson",
-    position: "Freelance Designer",
+    text: "ᴀᴍᴀᴢɪɴɢ ᴄᴏᴡᴏʀᴋɪɴɢ ꜱᴘᴀᴄᴇ ᴡɪᴛʜ ᴀ ᴠɪʙʀᴀɴᴛ ᴄᴏᴍᴍᴜɴɪᴛʏ. ᴛʜᴇ ᴀᴛᴍᴏꜱᴘʜᴇʀᴇ ɪꜱ ɢʀᴇᴀᴛ ꜰᴏʀ ᴘʀᴏᴅᴜᴄᴛɪᴠɪᴛʏ, ᴀɴᴅ ᴛʜᴇ ɪɴᴛᴇʀɴᴇᴛ ꜱᴘᴇᴇᴅ ɪꜱ ᴛᴏᴘ-ɴᴏᴛᴄʜ!",
+    name: "ꜱᴀʀᴀʜ ᴊᴏʜɴꜱᴏɴ",
+    position: "ꜰʀᴇᴇʟᴀɴᴄᴇ ᴅᴇꜱɪɢɴᴇʀ",
   },
   {
-    text: "SpaceHub has been a game changer for me. The facilities are modern, and the networking opportunities are fantastic!",
-    name: "John Doe",
-    position: "Startup Founder",
+    text: "ꜱᴘᴀᴄᴇʜᴜʙ ʜᴀꜱ ʙᴇᴇɴ ᴀ ɢᴀᴍᴇ ᴄʜᴀɴɢᴇʀ ꜰᴏʀ ᴍᴇ. ᴛʜᴇ ꜰᴀᴄɪʟɪᴛɪᴇꜱ ᴀʀᴇ ᴍᴏᴅᴇʀɴ, ᴀɴᴅ ᴛʜᴇ ɴᴇᴛᴡᴏʀᴋɪɴɢ ᴏᴘᴘᴏʀᴛᴜɴɪᴛɪᴇꜱ ᴀʀᴇ ꜰᴀɴᴛᴀꜱᴛɪᴄ!",
+    name: "ᴊᴏʜɴ ᴅᴏᴇ",
+    position: "ꜱᴛᴀʀᴛᴜᴘ ꜰᴏᴜɴᴅᴇʀ",
   },
 ];
 
@@ -30,7 +30,7 @@ const Testimonial = () => {
     <div className="bg-gray-50 py-12 px-6">
       <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-3xl font-bold text-gray-800 mb-6">
-          What Our Clients Say
+        ᴡʜᴀᴛ ᴏᴜʀ ᴄʟɪᴇɴᴛꜱ ꜱᴀʏ
         </h2>
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}

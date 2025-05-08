@@ -6,10 +6,10 @@ import { useRouter } from "next/navigation";
 const WorkExperienceBanner = () => {
   const router = useRouter();
   const quotes = [
-    "Ready To Try Different Work Experience Now",
-    "Expand Your Professional Horizons",
-    "Discover New Career Possibilities",
-    "Grow Through Diverse Experiences",
+    "ʀᴇᴀᴅʏ ᴛᴏ ᴛʀʏ ᴅɪꜰꜰᴇʀᴇɴᴛ ᴡᴏʀᴋ ᴇxᴘᴇʀɪᴇɴᴄᴇ ɴᴏᴡ",
+    "ᴇxᴘᴀɴᴅ ʏᴏᴜʀ ᴘʀᴏꜰᴇꜱꜱɪᴏɴᴀʟ ʜᴏʀɪᴢᴏɴꜱ",
+    "ᴅɪꜱᴄᴏᴠᴇʀ ɴᴇᴡ ᴄᴀʀᴇᴇʀ ᴘᴏꜱꜱɪʙɪʟɪᴛɪᴇꜱ",
+    "ɢʀᴏᴡ ᴛʜʀᴏᴜɢʜ ᴅɪᴠᴇʀꜱᴇ ᴇxᴘᴇʀɪᴇɴᴄᴇꜱ",
   ];
 
   const [quoteIndex, setQuoteIndex] = useState(0);
@@ -73,8 +73,8 @@ const WorkExperienceBanner = () => {
             </h2>
 
             <p className="mt-4 md:mt-6 text-base md:text-xl text-gray-600 max-w-3xl mx-auto">
-              Explore diverse work environments and find what truly inspires
-              you.
+              ᴇxᴘʟᴏʀᴇ ᴅɪᴠᴇʀꜱᴇ ᴡᴏʀᴋ ᴇɴᴠɪʀᴏɴᴍᴇɴᴛꜱ ᴀɴᴅ ꜰɪɴᴅ ᴡʜᴀᴛ ᴛʀᴜʟʏ ɪɴꜱᴘɪʀᴇꜱ
+              ʏᴏᴜ.
             </p>
 
             <div className="mt-6 md:mt-8 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
@@ -82,13 +82,13 @@ const WorkExperienceBanner = () => {
                 onClick={handleBrowseOpportunities}
                 className="px-5 py-2.5 sm:px-6 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-md transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
               >
-                Browse Opportunities
+                ʙʀᴏᴡꜱᴇ ᴏᴘᴘᴏʀᴛᴜɴɪᴛɪᴇꜱ
               </button>
               <button
                 onClick={handleLearnMore}
                 className="px-5 py-2.5 sm:px-6 sm:py-3 border border-blue-600 text-blue-600 hover:bg-blue-50 font-medium rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
               >
-                Learn More
+                ʟᴇᴀʀɴ ᴍᴏʀᴇ
               </button>
             </div>
           </div>

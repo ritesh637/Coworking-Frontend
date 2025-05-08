@@ -3,8 +3,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import {  BASE_URL } from "@/lib/config";
 
-const BASE_URL = "http://localhost:4000/api/promocode";
+
+const BASE_URLI = `${BASE_URL}/promocode`;
 
 const PromoCodePage = () => {
   const [promoCodes, setPromoCodes] = useState([]);
@@ -27,7 +29,7 @@ const PromoCodePage = () => {
 
   const fetchPromoCodes = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/all`);
+      const response = await axios.get(`${BASE_URLI}/all`);
       setPromoCodes(response.data);
     } catch (error) {
       setMessage("Failed to fetch promo codes.");
@@ -58,10 +60,10 @@ const PromoCodePage = () => {
       };
 
       if (selectedId) {
-        await axios.put(`${BASE_URL}/${selectedId}`, data, config);
+        await axios.put(`${BASE_URLI}/${selectedId}`, data, config);
         setMessage("✅ Promo code updated successfully!");
       } else {
-        await axios.post(`${BASE_URL}/create`, data, config);
+        await axios.post(`${BASE_URLI}/create`, data, config);
         setMessage("✅ Promo code created successfully!");
       }
 
@@ -75,7 +77,7 @@ const PromoCodePage = () => {
   const handleDelete = async (id) => {
     const token = Cookies.get("token");
     try {
-      await axios.delete(`${BASE_URL}/${id}`, {
+      await axios.delete(`${BASE_URLI}/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

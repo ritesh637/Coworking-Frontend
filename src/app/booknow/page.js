@@ -7,7 +7,7 @@ import Home from "../../components/booknow/Home";
 
 const page = () => {
   return <div>
-    <HeroSection></HeroSection>
+    {/* <HeroSection></HeroSection> */}
     {/* <BookingCard></BookingCard> */}
     <Home></Home>
   </div>

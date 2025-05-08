@@ -2,12 +2,12 @@ export default function MissionSection() {
   return (
     <section className="px-6 py-12 md:px-12 lg:px-24 bg-gray-50">
       <h2 className="text-4xl font-extrabold text-center text-gray-900">
-        Our Mission
+        ᴏᴜʀ ᴍɪꜱꜱɪᴏɴ
       </h2>
       <p className="text-center text-gray-700 text-lg mt-4 max-w-3xl mx-auto">
-        Coworking is an arrangement in which several workers from different
-        companies share an office space, allowing cost savings and convenience
-        through the use of common infrastructure.
+        ᴄᴏᴡᴏʀᴋɪɴɢ ɪꜱ ᴀɴ ᴀʀʀᴀɴɢᴇᴍᴇɴᴛ ɪɴ ᴡʜɪᴄʜ ꜱᴇᴠᴇʀᴀʟ ᴡᴏʀᴋᴇʀꜱ ꜰʀᴏᴍ ᴅɪꜰꜰᴇʀᴇɴᴛ
+        ᴄᴏᴍᴘᴀɴɪᴇꜱ ꜱʜᴀʀᴇ ᴀɴ ᴏꜰꜰɪᴄᴇ ꜱᴘᴀᴄᴇ, ᴀʟʟᴏᴡɪɴɢ ᴄᴏꜱᴛ ꜱᴀᴠɪɴɢꜱ ᴀɴᴅ ᴄᴏɴᴠᴇɴɪᴇɴᴄᴇ
+        ᴛʜʀᴏᴜɢʜ ᴛʜᴇ ᴜꜱᴇ ᴏꜰ ᴄᴏᴍᴍᴏɴ ɪɴꜰʀᴀꜱᴛʀᴜᴄᴛᴜʀᴇ.
       </p>
 
       <div className="mt-16 space-y-16">
@@ -20,13 +20,13 @@ export default function MissionSection() {
           />
           <div className="text-lg">
             <h3 className="text-3xl font-bold text-gray-900">
-              Change The Way Work Is Done.
+              ᴄʜᴀɴɢᴇ ᴛʜᴇ ᴡᴀʏ ᴡᴏʀᴋ ɪꜱ ᴅᴏɴᴇ.
             </h3>
             <p className="text-gray-700 mt-4 leading-relaxed">
-              Coworking is an arrangement in which several workers from
-              different companies share an office space, allowing cost savings
-              and convenience through shared infrastructure, such as high-speed
-              internet, utilities, and receptionist services.
+              ᴄᴏᴡᴏʀᴋɪɴɢ ɪꜱ ᴀɴ ᴀʀʀᴀɴɢᴇᴍᴇɴᴛ ɪɴ ᴡʜɪᴄʜ ꜱᴇᴠᴇʀᴀʟ ᴡᴏʀᴋᴇʀꜱ ꜰʀᴏᴍ
+              ᴅɪꜰꜰᴇʀᴇɴᴛ ᴄᴏᴍᴘᴀɴɪᴇꜱ ꜱʜᴀʀᴇ ᴀɴ ᴏꜰꜰɪᴄᴇ ꜱᴘᴀᴄᴇ, ᴀʟʟᴏᴡɪɴɢ ᴄᴏꜱᴛ ꜱᴀᴠɪɴɢꜱ
+              ᴀɴᴅ ᴄᴏɴᴠᴇɴɪᴇɴᴄᴇ ᴛʜʀᴏᴜɢʜ ꜱʜᴀʀᴇᴅ ɪɴꜰʀᴀꜱᴛʀᴜᴄᴛᴜʀᴇ, ꜱᴜᴄʜ ᴀꜱ ʜɪɢʜ-ꜱᴘᴇᴇᴅ
+              ɪɴᴛᴇʀɴᴇᴛ, ᴜᴛɪʟɪᴛɪᴇꜱ, ᴀɴᴅ ʀᴇᴄᴇᴘᴛɪᴏɴɪꜱᴛ ꜱᴇʀᴠɪᴄᴇꜱ.
             </p>
           </div>
         </div>
@@ -40,13 +40,13 @@ export default function MissionSection() {
           />
           <div className="text-lg">
             <h3 className="text-3xl font-bold text-gray-900">
-              Innovation Through Collaboration.
+              ɪɴɴᴏᴠᴀᴛɪᴏɴ ᴛʜʀᴏᴜɢʜ ᴄᴏʟʟᴀʙᴏʀᴀᴛɪᴏɴ.
             </h3>
             <p className="text-gray-700 mt-4 leading-relaxed">
-              Coworking spaces provide a platform for networking, sharing
-              knowledge, and enhancing productivity through collective
-              intelligence and resource sharing. It fosters an environment of
-              creativity and collaboration.
+              ᴄᴏᴡᴏʀᴋɪɴɢ ꜱᴘᴀᴄᴇꜱ ᴘʀᴏᴠɪᴅᴇ ᴀ ᴘʟᴀᴛꜰᴏʀᴍ ꜰᴏʀ ɴᴇᴛᴡᴏʀᴋɪɴɢ, ꜱʜᴀʀɪɴɢ
+              ᴋɴᴏᴡʟᴇᴅɢᴇ, ᴀɴᴅ ᴇɴʜᴀɴᴄɪɴɢ ᴘʀᴏᴅᴜᴄᴛɪᴠɪᴛʏ ᴛʜʀᴏᴜɢʜ ᴄᴏʟʟᴇᴄᴛɪᴠᴇ
+              ɪɴᴛᴇʟʟɪɢᴇɴᴄᴇ ᴀɴᴅ ʀᴇꜱᴏᴜʀᴄᴇ ꜱʜᴀʀɪɴɢ. ɪᴛ ꜰᴏꜱᴛᴇʀꜱ ᴀɴ ᴇɴᴠɪʀᴏɴᴍᴇɴᴛ ᴏꜰ
+              ᴄʀᴇᴀᴛɪᴠɪᴛʏ ᴀɴᴅ ᴄᴏʟʟᴀʙᴏʀᴀᴛɪᴏɴ.
             </p>
           </div>
         </div>

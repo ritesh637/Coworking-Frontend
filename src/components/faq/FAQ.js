@@ -6,29 +6,29 @@ import { AnimatePresence, motion } from "framer-motion";
 
 const faqs = [
   {
-    question: "What are your operating hours?",
+    question: "ᴡʜᴀᴛ ᴀʀᴇ ʏᴏᴜʀ ᴏᴘᴇʀᴀᴛɪɴɢ ʜᴏᴜʀꜱ?",
     answer:
-      "Our co-working space is open 24/7 for members with access cards. Guests can visit from 9 AM to 7 PM on weekdays.",
+      "ᴏᴜʀ ᴄᴏ-ᴡᴏʀᴋɪɴɢ ꜱᴘᴀᴄᴇ ɪꜱ ᴏᴘᴇɴ 24/7 ꜰᴏʀ ᴍᴇᴍʙᴇʀꜱ ᴡɪᴛʜ ᴀᴄᴄᴇꜱꜱ ᴄᴀʀᴅꜱ. ɢᴜᴇꜱᴛꜱ ᴄᴀɴ ᴠɪꜱɪᴛ ꜰʀᴏᴍ 9 ᴀᴍ ᴛᴏ 7 ᴘᴍ ᴏɴ ᴡᴇᴇᴋᴅᴀʏꜱ.",
   },
   {
-    question: "Do you offer day passes?",
+    question: "ᴅᴏ ʏᴏᴜ ᴏꜰꜰᴇʀ ᴅᴀʏ ᴘᴀꜱꜱᴇꜱ?",
     answer:
-      "Yes, we offer flexible day passes for those who need a workspace for a short duration.",
+      "ʏᴇꜱ, ᴡᴇ ᴏꜰꜰᴇʀ ꜰʟᴇxɪʙʟᴇ ᴅᴀʏ ᴘᴀꜱꜱᴇꜱ ꜰᴏʀ ᴛʜᴏꜱᴇ ᴡʜᴏ ɴᴇᴇᴅ ᴀ ᴡᴏʀᴋꜱᴘᴀᴄᴇ ꜰᴏʀ ᴀ ꜱʜᴏʀᴛ ᴅᴜʀᴀᴛɪᴏɴ.",
   },
   {
-    question: "Are meeting rooms available?",
+    question: "ᴀʀᴇ ᴍᴇᴇᴛɪɴɢ ʀᴏᴏᴍꜱ ᴀᴠᴀɪʟᴀʙʟᴇ?",
     answer:
-      "Yes, we have fully equipped meeting rooms available for booking. Members get discounted rates.",
+      "ʏᴇꜱ, ᴡᴇ ʜᴀᴠᴇ ꜰᴜʟʟʏ ᴇQᴜɪᴘᴘᴇᴅ ᴍᴇᴇᴛɪɴɢ ʀᴏᴏᴍꜱ ᴀᴠᴀɪʟᴀʙʟᴇ ꜰᴏʀ ʙᴏᴏᴋɪɴɢ. ᴍᴇᴍʙᴇʀꜱ ɢᴇᴛ ᴅɪꜱᴄᴏᴜɴᴛᴇᴅ ʀᴀᴛᴇꜱ.",
   },
   {
-    question: "Is there high-speed internet?",
+    question: "ɪꜱ ᴛʜᴇʀᴇ ʜɪɢʜ-ꜱᴘᴇᴇᴅ ɪɴᴛᴇʀɴᴇᴛ?",
     answer:
-      "Absolutely! We provide high-speed Wi-Fi and ethernet connections for seamless work.",
+      "ᴀʙꜱᴏʟᴜᴛᴇʟʏ! ᴡᴇ ᴘʀᴏᴠɪᴅᴇ ʜɪɢʜ-ꜱᴘᴇᴇᴅ ᴡɪ-ꜰɪ ᴀɴᴅ ᴇᴛʜᴇʀɴᴇᴛ ᴄᴏɴɴᴇᴄᴛɪᴏɴꜱ ꜰᴏʀ ꜱᴇᴀᴍʟᴇꜱꜱ ᴡᴏʀᴋ.",
   },
   {
-    question: "Can I bring my pet?",
+    question: "ᴄᴀɴ ɪ ʙʀɪɴɢ ᴍʏ ᴘᴇᴛ?",
     answer:
-      "Currently, we do not allow pets in the workspace to maintain a comfortable environment for all.",
+      "ᴄᴜʀʀᴇɴᴛʟʏ, ᴡᴇ ᴅᴏ ɴᴏᴛ ᴀʟʟᴏᴡ ᴘᴇᴛꜱ ɪɴ ᴛʜᴇ ᴡᴏʀᴋꜱᴘᴀᴄᴇ ᴛᴏ ᴍᴀɪɴᴛᴀɪɴ ᴀ ᴄᴏᴍꜰᴏʀᴛᴀʙʟᴇ ᴇɴᴠɪʀᴏɴᴍᴇɴᴛ ꜰᴏʀ ᴀʟʟ.",
   },
 ];
 
@@ -43,7 +43,7 @@ const FAQ = () => {
     <section className="bg-gray-50 dark:bg-gray-900 py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
         <h2 className="text-4xl font-bold text-center text-gray-900 dark:text-white mb-12">
-          Frequently Asked Questions
+        ꜰʀᴇQᴜᴇɴᴛʟʏ ᴀꜱᴋᴇᴅ Qᴜᴇꜱᴛɪᴏɴꜱ
         </h2>
         <div className="space-y-6">
           {faqs.map((faq, index) => (

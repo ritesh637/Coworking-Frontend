@@ -6,8 +6,10 @@ import Cookies from "js-cookie";
 import { Tab } from "@headlessui/react";
 import { toast, Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
+import { BASE_URL } from "@/lib/config";
 
-const BASE_URL = "http://localhost:4000/api/user";
+
+const BASE_URLI = `${BASE_URL}/user`;
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -43,7 +45,7 @@ const Profile = () => {
       }
 
       try {
-        const response = await axios.get(`${BASE_URL}/profile`, {
+        const response = await axios.get(`${BASE_URLI}/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -183,7 +185,7 @@ const Profile = () => {
     }
 
     try {
-      const response = await axios.put(`${BASE_URL}/update-profile`, formData, {
+      const response = await axios.put(`${BASE_URLI}/update-profile`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

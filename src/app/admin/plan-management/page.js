@@ -2,366 +2,252 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { BASE_URL } from "@/lib/config";
 
-const API_BASE = "http://localhost:4000/api/plans";
+const API_BASE = `${BASE_URL}/plans`;
+const OFFICE_API = `${BASE_URL}/office`;
 
-// Icons (you can replace these with actual icon components from your library)
-const ChevronLeftIcon = () => (
+const Icon = ({ path, className = "" }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 20 20"
     fill="currentColor"
-    className="h-5 w-5"
+    className={`h-5 w-5 ${className}`}
   >
-    <path
-      fillRule="evenodd"
-      d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
-      clipRule="evenodd"
-    />
-  </svg>
-);
-
-const ChevronRightIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 20 20"
-    fill="currentColor"
-    className="h-5 w-5"
-  >
-    <path
-      fillRule="evenodd"
-      d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-      clipRule="evenodd"
-    />
-  </svg>
-);
-
-const SearchIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 20 20"
-    fill="currentColor"
-    className="h-5 w-5"
-  >
-    <path
-      fillRule="evenodd"
-      d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
-      clipRule="evenodd"
-    />
-  </svg>
-);
-
-const ExclamationIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 20 20"
-    fill="currentColor"
-    className="h-5 w-5"
-  >
-    <path
-      fillRule="evenodd"
-      d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"
-      clipRule="evenodd"
-    />
-  </svg>
-);
-
-const PlusIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 20 20"
-    fill="currentColor"
-    className="h-5 w-5"
-  >
-    <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+    <path fillRule="evenodd" d={path} clipRule="evenodd" />
   </svg>
 );
 
 const PlanManager = () => {
-  const [plans, setPlans] = useState([]);
-  const [form, setForm] = useState({
-    title: "",
-    price: "",
-    category: "hourly",
-  });
-  const [editId, setEditId] = useState(null);
-  const [filterCategory, setFilterCategory] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
-  const [errors, setErrors] = useState({
-    title: "",
-    price: "",
-  });
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 10,
-    total: 0,
-  });
-  const [deleteModal, setDeleteModal] = useState({
-    isOpen: false,
-    id: null,
+  const [state, setState] = useState({
+    plans: [],
+    form: { title: "", price: "", category: "hourly", officeId: "" },
+    editId: null,
+    filter: "",
+    search: "",
+    loading: false,
+    error: null,
+    success: null,
+    pagination: { page: 1, limit: 5, total: 0 },
+    deleteModal: false,
+    offices: [],
+    selectedOffice: "",
   });
 
   const token = Cookies.get("token");
+  const update = (updates) => setState((prev) => ({ ...prev, ...updates }));
 
-  const validateForm = () => {
-    let valid = true;
-    const newErrors = { title: "", price: "" };
+  // Fetch offices
+  useEffect(() => {
+    const fetchOffices = async () => {
+      try {
+        const res = await axios.get(OFFICE_API);
+        if (Array.isArray(res.data.offices)) {
+          update({ offices: res.data.offices });
+          if (res.data.offices.length > 0) {
+            update({ selectedOffice: res.data.offices[0].id });
+          }
+        }
+      } catch (err) {
+        update({
+          error: err.response?.data?.message || "Failed to fetch offices",
+        });
+      }
+    };
+    fetchOffices();
+  }, []);
 
-    if (!form.title.trim()) {
-      newErrors.title = "Title is required";
-      valid = false;
-    }
-
-    if (!form.price || isNaN(form.price) || Number(form.price) <= 0) {
-      newErrors.price = "Please enter a valid positive number";
-      valid = false;
-    }
-
-    setErrors(newErrors);
-    return valid;
-  };
-
-  const fetchPlans = async (category = "") => {
-    setIsLoading(true);
-    setError(null);
+  // Fetch plans
+  const fetchPlans = async () => {
+    update({ loading: true, error: null });
     try {
-      const res = await axios.get(
-        category
-          ? `${API_BASE}/category/${category}?page=${pagination.page}&limit=${pagination.limit}`
-          : `${API_BASE}?page=${pagination.page}&limit=${pagination.limit}`
-      );
-      setPlans(res.data.plans || res.data);
-      setPagination((prev) => ({
-        ...prev,
-        total: res.data.total || res.data.length,
-      }));
+      const url = `${API_BASE}/office/${state.selectedOffice}?page=${state.pagination.page}&limit=${state.pagination.limit}`;
+      const res = await axios.get(url);
+      update({
+        plans: res.data.plans || res.data,
+        pagination: {
+          ...state.pagination,
+          total: res.data.total || res.data.length,
+        },
+      });
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to fetch plans");
-      console.error("Fetch Plans Error:", err);
+      update({ error: err.response?.data?.message || "Failed to fetch plans" });
     } finally {
-      setIsLoading(false);
+      update({ loading: false });
     }
   };
 
   useEffect(() => {
-    fetchPlans();
-  }, [pagination.page, pagination.limit]);
+    if (state.selectedOffice) {
+      fetchPlans();
+    }
+  }, [state.pagination.page, state.pagination.limit, state.selectedOffice]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!state.form.title.trim()) return update({ error: "Title is required" });
+    if (
+      !state.form.price ||
+      isNaN(state.form.price) ||
+      Number(state.form.price) <= 0
+    )
+      return update({ error: "Please enter a valid price" });
+    if (!state.selectedOffice) return update({ error: "Office is required" });
 
-    setIsLoading(true);
-    setError(null);
-
+    update({ loading: true, error: null });
     try {
-      const headers = {
-        Authorization: `Bearer ${token}`,
+      const headers = { Authorization: `Bearer ${token}` };
+      const method = state.editId ? "put" : "post";
+      const url = state.editId ? `${API_BASE}/${state.editId}` : API_BASE;
+
+      const payload = {
+        ...state.form,
+        officeId: state.selectedOffice,
       };
 
-      if (editId) {
-        await axios.put(`${API_BASE}/${editId}`, form, { headers });
-        setSuccess("Plan updated successfully!");
-      } else {
-        await axios.post(API_BASE, form, { headers });
-        setSuccess("Plan created successfully!");
-      }
+      await axios[method](url, payload, { headers });
 
-      setForm({ title: "", price: "", category: "hourly" });
-      setEditId(null);
+      update({
+        form: { title: "", price: "", category: "hourly", officeId: "" },
+        editId: null,
+        success: `Plan ${state.editId ? "updated" : "created"} successfully!`,
+      });
       fetchPlans();
-      setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
-      setError(err.response?.data?.message || "Error saving plan");
+      update({ error: err.response?.data?.message || "Error saving plan" });
     } finally {
-      setIsLoading(false);
+      update({ loading: false });
     }
   };
 
-  const handleDeleteClick = (id) => {
-    setDeleteModal({ isOpen: true, id });
-  };
-
-  const handleDeleteConfirm = async () => {
-    setIsLoading(true);
+  const deletePlan = async (id) => {
+    update({ loading: true });
     try {
-      await axios.delete(`${API_BASE}/${deleteModal.id}`, {
+      await axios.delete(`${API_BASE}/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      update({ success: "Plan deleted!", deleteModal: false });
       fetchPlans();
-      setSuccess("Plan deleted successfully!");
-      setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
-      setError(err.response?.data?.message || "Delete failed");
+      update({ error: err.response?.data?.message || "Delete failed" });
     } finally {
-      setIsLoading(false);
-      setDeleteModal({ isOpen: false, id: null });
+      update({ loading: false });
     }
   };
 
   const handleEdit = (plan) => {
-    setForm({ title: plan.title, price: plan.price, category: plan.category });
-    setEditId(plan._id);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    update({
+      form: {
+        title: plan.title,
+        price: plan.price,
+        category: plan.category,
+        officeId: plan.officeId,
+      },
+      editId: plan._id,
+    });
+    // Smooth scroll to form
+    document
+      .getElementById("plan-form")
+      ?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleSearch = async () => {
-    setIsLoading(true);
-    try {
-      const res = await axios.get(`${API_BASE}/search?query=${searchQuery}`);
-      setPlans(res.data);
-    } catch (err) {
-      setError(err.response?.data?.message || "Search failed");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const LoadingRow = () => (
-    <tr>
-      <td className="px-4 py-4" colSpan={4}>
-        <div className="animate-pulse flex space-x-4">
-          <div className="flex-1 space-y-4 py-1">
-            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-          </div>
-        </div>
-      </td>
-    </tr>
-  );
-
-  const Pagination = () => (
-    <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200 sm:px-6">
-      <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm text-gray-700">
-            Showing{" "}
-            <span className="font-medium">
-              {(pagination.page - 1) * pagination.limit + 1}
-            </span>{" "}
-            to{" "}
-            <span className="font-medium">
-              {Math.min(pagination.page * pagination.limit, pagination.total)}
-            </span>{" "}
-            of <span className="font-medium">{pagination.total}</span> results
-          </p>
-        </div>
-        <div>
-          <nav
-            className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-            aria-label="Pagination"
-          >
-            <button
-              onClick={() =>
-                setPagination((prev) => ({
-                  ...prev,
-                  page: Math.max(1, prev.page - 1),
-                }))
-              }
-              disabled={pagination.page === 1}
-              className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
-            >
-              <span className="sr-only">Previous</span>
-              <ChevronLeftIcon />
-            </button>
-            <button
-              onClick={() =>
-                setPagination((prev) => ({ ...prev, page: prev.page + 1 }))
-              }
-              disabled={pagination.page * pagination.limit >= pagination.total}
-              className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
-            >
-              <span className="sr-only">Next</span>
-              <ChevronRightIcon />
-            </button>
-          </nav>
-        </div>
-      </div>
-    </div>
-  );
+  const filteredPlans = state.plans.filter((plan) => {
+    const matchesSearch = plan.title
+      .toLowerCase()
+      .includes(state.search.toLowerCase());
+    const matchesFilter = state.filter ? plan.category === state.filter : true;
+    return matchesSearch && matchesFilter;
+  });
 
   return (
-    <div className="min-h-screen bg-gray-50 py-4 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gray-50 p-4 md:p-6 text-black">
+      <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-            📋 Plan Manager
-          </h1>
-          <p className="mt-2 text-sm sm:text-base text-gray-600">
-            Manage your subscription plans with ease
+          <h1 className="text-3xl font-bold text-gray-900">📋 Plan Manager</h1>
+          <p className="mt-2 text-gray-600">
+            Manage subscription plans by office
           </p>
         </div>
 
-        {/* Form Section */}
-        <div className="bg-white shadow rounded-lg p-4 sm:p-6 mb-6">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
-            {editId ? "Edit Plan" : "Create New Plan"}
+        {/* Office Selection */}
+        <div className="bg-white shadow rounded-lg p-6 mb-6">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+            <Icon path="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
+            Office Selection
           </h2>
-          <form onSubmit={handleSubmit}>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+          <select
+            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            value={state.selectedOffice}
+            onChange={(e) => update({ selectedOffice: e.target.value })}
+          >
+            {state.offices.map((office) => (
+              <option key={office.id} value={office.id}>
+                {office.name} ({office.id})
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Plan Form */}
+        <div id="plan-form" className="bg-white shadow rounded-lg p-6 mb-6">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+            {state.editId ? (
+              <>
+                <Icon path="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                Edit Plan
+              </>
+            ) : (
+              <>
+                <Icon path="M12 4.5v15m7.5-7.5h-15" />
+                Create New Plan
+              </>
+            )}
+          </h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div>
-                <label
-                  htmlFor="title"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
+                <label className="block text-sm font-medium mb-1 text-gray-700">
                   Title
                 </label>
                 <input
-                  id="title"
-                  type="text"
-                  className={`w-full px-3 py-2 border ${
-                    errors.title ? "border-red-300" : "border-gray-300"
-                  } rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base`}
+                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   placeholder="Plan title"
-                  value={form.title}
-                  onChange={(e) => setForm({ ...form, title: e.target.value })}
-                  required
+                  value={state.form.title}
+                  onChange={(e) =>
+                    update({ form: { ...state.form, title: e.target.value } })
+                  }
                 />
-                {errors.title && (
-                  <p className="mt-1 text-sm text-red-600">{errors.title}</p>
-                )}
               </div>
-
               <div>
-                <label
-                  htmlFor="price"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
+                <label className="block text-sm font-medium mb-1 text-gray-700">
                   Price
                 </label>
-                <input
-                  id="price"
-                  type="number"
-                  className={`w-full px-3 py-2 border ${
-                    errors.price ? "border-red-300" : "border-gray-300"
-                  } rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base`}
-                  placeholder="0.00"
-                  value={form.price}
-                  onChange={(e) => setForm({ ...form, price: e.target.value })}
-                  required
-                  min="0"
-                  step="0.01"
-                />
-                {errors.price && (
-                  <p className="mt-1 text-sm text-red-600">{errors.price}</p>
-                )}
+                <div className="relative">
+                  <span className="absolute left-3 top-3 text-gray-500">₹</span>
+                  <input
+                    type="number"
+                    className="w-full p-3 pl-8 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    placeholder="0.00"
+                    value={state.form.price}
+                    onChange={(e) =>
+                      update({ form: { ...state.form, price: e.target.value } })
+                    }
+                    step="0.01"
+                    min="0"
+                  />
+                </div>
               </div>
-
               <div>
-                <label
-                  htmlFor="category"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
+                <label className="block text-sm font-medium mb-1 text-gray-700">
                   Category
                 </label>
                 <select
-                  id="category"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                  value={form.category}
+                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  value={state.form.category}
                   onChange={(e) =>
-                    setForm({ ...form, category: e.target.value })
+                    update({
+                      form: { ...state.form, category: e.target.value },
+                    })
                   }
                 >
                   <option value="hourly">Hourly</option>
@@ -369,17 +255,20 @@ const PlanManager = () => {
                   <option value="monthly">Monthly</option>
                 </select>
               </div>
-
               <div className="flex items-end">
                 <button
                   type="submit"
-                  disabled={isLoading}
-                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                  disabled={state.loading}
+                  className={`w-full p-3 rounded-lg font-medium transition-colors ${
+                    state.loading
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-indigo-600 hover:bg-indigo-700 text-white"
+                  }`}
                 >
-                  {isLoading ? (
-                    <span className="flex items-center justify-center">
+                  {state.loading ? (
+                    <span className="flex items-center justify-center gap-2">
                       <svg
-                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                        className="animate-spin h-4 w-4 text-white"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -400,7 +289,7 @@ const PlanManager = () => {
                       </svg>
                       Processing...
                     </span>
-                  ) : editId ? (
+                  ) : state.editId ? (
                     "Update Plan"
                   ) : (
                     "Create Plan"
@@ -408,47 +297,53 @@ const PlanManager = () => {
                 </button>
               </div>
             </div>
+            {state.editId && (
+              <div className="text-right">
+                <button
+                  type="button"
+                  onClick={() => {
+                    update({
+                      form: {
+                        title: "",
+                        price: "",
+                        category: "hourly",
+                        officeId: "",
+                      },
+                      editId: null,
+                    });
+                  }}
+                  className="text-sm text-gray-500 hover:text-gray-700"
+                >
+                  Cancel edit
+                </button>
+              </div>
+            )}
           </form>
         </div>
 
-        {/* Filter Section */}
-        <div className="bg-white shadow rounded-lg p-4 sm:p-6 mb-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div className="w-full sm:w-64">
-              <label htmlFor="search" className="sr-only">
-                Search
-              </label>
-              <div className="relative">
-                <input
-                  id="search"
-                  type="text"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                  placeholder="Search plans..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-                />
-                <button
-                  onClick={handleSearch}
-                  className="absolute right-2 top-2 text-gray-400 hover:text-gray-500"
-                >
-                  <SearchIcon />
-                </button>
+        {/* Search and Filter */}
+        <div className="bg-white shadow rounded-lg p-6 mb-6">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+            <Icon path="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            Search & Filter
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="relative">
+              <input
+                className="w-full p-3 pl-10 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="Search plans..."
+                value={state.search}
+                onChange={(e) => update({ search: e.target.value })}
+              />
+              <div className="absolute left-3 top-3 text-gray-400">
+                <Icon path="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" />
               </div>
             </div>
-            <div className="w-full sm:w-48">
-              <label htmlFor="filter" className="sr-only">
-                Filter by category
-              </label>
+            <div>
               <select
-                id="filter"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                value={filterCategory}
-                onChange={(e) => {
-                  const category = e.target.value;
-                  setFilterCategory(category);
-                  fetchPlans(category);
-                }}
+                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                value={state.filter}
+                onChange={(e) => update({ filter: e.target.value })}
               >
                 <option value="">All Categories</option>
                 <option value="hourly">Hourly</option>
@@ -459,60 +354,41 @@ const PlanManager = () => {
           </div>
         </div>
 
-        {/* Success Message */}
-        {success && (
-          <div className="bg-green-50 border-l-4 border-green-400 p-4 mb-6 rounded">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <svg
-                  className="h-5 w-5 text-green-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <div className="ml-3">
-                <p className="text-sm text-green-700">{success}</p>
-              </div>
+        {/* Status Messages */}
+        {state.error && (
+          <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-lg">
+            <div className="flex items-center text-red-700">
+              <Icon
+                path="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                className="flex-shrink-0"
+              />
+              <p className="ml-2">{state.error}</p>
             </div>
           </div>
         )}
 
-        {/* Error Message */}
-        {error && (
-          <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <svg
-                  className="h-5 w-5 text-red-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <div className="ml-3">
-                <p className="text-sm text-red-700">{error}</p>
-              </div>
+        {state.success && (
+          <div className="bg-green-50 border-l-4 border-green-400 p-4 mb-6 rounded-lg">
+            <div className="flex items-center text-green-700">
+              <Icon
+                path="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                className="flex-shrink-0"
+              />
+              <p className="ml-2">{state.success}</p>
+              <button
+                onClick={() => update({ success: null })}
+                className="ml-auto text-green-700 hover:text-green-900"
+              >
+                <Icon path="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+              </button>
             </div>
           </div>
         )}
 
         {/* Plans Table */}
         <div className="bg-white shadow rounded-lg overflow-hidden">
-          {isLoading && !plans.length ? (
-            <div className="p-8 text-center">
+          {state.loading && !state.plans.length ? (
+            <div className="p-8 text-center text-gray-500">
               <div className="flex justify-center">
                 <svg
                   className="animate-spin h-8 w-8 text-indigo-600"
@@ -535,39 +411,35 @@ const PlanManager = () => {
                   ></path>
                 </svg>
               </div>
-              <p className="mt-2 text-gray-600">Loading plans...</p>
+              <p className="mt-4">Loading plans...</p>
             </div>
-          ) : plans.length === 0 ? (
+          ) : filteredPlans.length === 0 ? (
             <div className="p-8 text-center">
-              <svg
-                className="mx-auto h-24 w-24 text-gray-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1}
-                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                />
-              </svg>
-              <h3 className="mt-4 text-lg font-medium text-gray-900">
-                No plans yet
+              <div className="mx-auto h-24 w-24 text-gray-400">
+                <Icon path="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" />
+              </div>
+              <h3 className="mt-2 text-lg font-medium text-gray-900">
+                No plans found
               </h3>
               <p className="mt-1 text-sm text-gray-500">
-                Get started by creating your first plan.
+                {state.search || state.filter
+                  ? "Try adjusting your search or filter"
+                  : "Get started by creating a new plan"}
               </p>
               <div className="mt-6">
                 <button
-                  type="button"
-                  onClick={() =>
-                    window.scrollTo({ top: 0, behavior: "smooth" })
-                  }
-                  className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  onClick={() => {
+                    document
+                      .getElementById("plan-form")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                  <PlusIcon />
-                  New Plan
+                  <Icon
+                    path="M12 4.5v15m7.5-7.5h-15"
+                    className="-ml-1 mr-2 h-5 w-5"
+                  />
+                  Create Plan
                 </button>
               </div>
             </div>
@@ -579,148 +451,253 @@ const PlanManager = () => {
                     <tr>
                       <th
                         scope="col"
-                        className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Office
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
                         Title
                       </th>
                       <th
                         scope="col"
-                        className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
                         Price
                       </th>
                       <th
                         scope="col"
-                        className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
                         Category
                       </th>
                       <th
                         scope="col"
-                        className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
                         Actions
                       </th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {isLoading ? (
-                      <>
-                        <LoadingRow />
-                        <LoadingRow />
-                        <LoadingRow />
-                      </>
-                    ) : (
-                      plans.map((plan) => (
-                        <tr key={plan._id} className="hover:bg-gray-50">
-                          <td className="px-4 py-4 whitespace-nowrap">
-                            <div className="text-sm font-medium text-gray-900">
-                              {plan.title}
+                    {filteredPlans.map((plan) => (
+                      <tr key={plan._id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <div className="flex-shrink-0 h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center">
+                              <Icon
+                                path="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z"
+                                className="h-5 w-5 text-indigo-500"
+                              />
                             </div>
-                          </td>
-                          <td className="px-4 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">
-                              {plan.price}
+                            <div className="ml-4">
+                              <div className="text-sm font-medium text-gray-900">
+                                {state.offices.find(
+                                  (o) => o.id === plan.officeId
+                                )?.name || plan.officeId}
+                              </div>
                             </div>
-                          </td>
-                          <td className="px-4 py-4 whitespace-nowrap">
-                            <span
-                              className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                              ${
-                                plan.category === "hourly"
-                                  ? "bg-blue-100 text-blue-800"
-                                  : plan.category === "daily"
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-purple-100 text-purple-800"
-                              }`}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">
+                            {plan.title}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900 font-medium">
+                            ₹{Number(plan.price).toFixed(2)}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span
+                            className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                              plan.category === "hourly"
+                                ? "bg-blue-100 text-blue-800"
+                                : plan.category === "daily"
+                                ? "bg-green-100 text-green-800"
+                                : "bg-purple-100 text-purple-800"
+                            }`}
+                          >
+                            {plan.category.charAt(0).toUpperCase() +
+                              plan.category.slice(1)}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <div className="flex justify-end space-x-4">
+                            <button
+                              onClick={() => handleEdit(plan)}
+                              className="text-indigo-600 hover:text-indigo-900 flex items-center"
                             >
-                              {plan.category}
-                            </span>
-                          </td>
-                          <td className="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <div className="flex justify-end space-x-3">
-                              <button
-                                onClick={() => handleEdit(plan)}
-                                className="text-indigo-600 hover:text-indigo-900"
-                                disabled={isLoading}
-                              >
-                                Edit
-                              </button>
-                              <button
-                                onClick={() => handleDeleteClick(plan._id)}
-                                className="text-red-600 hover:text-red-900"
-                                disabled={isLoading}
-                              >
-                                Delete
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))
-                    )}
+                              <Icon
+                                path="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+                                className="mr-1"
+                              />
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => update({ deleteModal: plan._id })}
+                              className="text-red-600 hover:text-red-900 flex items-center"
+                            >
+                              <Icon
+                                path="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                                className="mr-1"
+                              />
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
-              <Pagination />
-            </>
-          )}
-        </div>
-      </div>
 
-      {/* Delete Confirmation Modal */}
-      {deleteModal.isOpen && (
-        <div className="fixed z-10 inset-0 overflow-y-auto">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div
-              className="fixed inset-0 transition-opacity"
-              aria-hidden="true"
-            >
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            <span
-              className="hidden sm:inline-block sm:align-middle sm:h-screen"
-              aria-hidden="true"
-            >
-              &#8203;
-            </span>
-            <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
-              <div>
-                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
-                  <ExclamationIcon />
+              {/* Pagination */}
+              <div className="bg-white px-6 py-3 flex items-center justify-between border-t border-gray-200">
+                <div className="flex-1 flex justify-between items-center sm:hidden">
+                  <button
+                    onClick={() =>
+                      update({
+                        pagination: {
+                          ...state.pagination,
+                          page: Math.max(1, state.pagination.page - 1),
+                        },
+                      })
+                    }
+                    disabled={state.pagination.page === 1}
+                    className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Previous
+                  </button>
+                  <span className="text-sm text-gray-700">
+                    Page {state.pagination.page}
+                  </span>
+                  <button
+                    onClick={() =>
+                      update({
+                        pagination: {
+                          ...state.pagination,
+                          page: state.pagination.page + 1,
+                        },
+                      })
+                    }
+                    disabled={
+                      state.pagination.page * state.pagination.limit >=
+                      state.pagination.total
+                    }
+                    className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Next
+                  </button>
                 </div>
-                <div className="mt-3 text-center sm:mt-5">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">
-                    Delete Plan
-                  </h3>
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-500">
-                      Are you sure you want to delete this plan? This action
-                      cannot be undone.
+                <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-sm text-gray-700">
+                      Showing{" "}
+                      <span className="font-medium">
+                        {(state.pagination.page - 1) * state.pagination.limit +
+                          1}
+                      </span>{" "}
+                      to{" "}
+                      <span className="font-medium">
+                        {Math.min(
+                          state.pagination.page * state.pagination.limit,
+                          state.pagination.total
+                        )}
+                      </span>{" "}
+                      of{" "}
+                      <span className="font-medium">
+                        {state.pagination.total}
+                      </span>{" "}
+                      plans
                     </p>
+                  </div>
+                  <div>
+                    <nav
+                      className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+                      aria-label="Pagination"
+                    >
+                      <button
+                        onClick={() =>
+                          update({
+                            pagination: {
+                              ...state.pagination,
+                              page: Math.max(1, state.pagination.page - 1),
+                            },
+                          })
+                        }
+                        disabled={state.pagination.page === 1}
+                        className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <span className="sr-only">Previous</span>
+                        <Icon path="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" />
+                      </button>
+                      <button
+                        onClick={() =>
+                          update({
+                            pagination: {
+                              ...state.pagination,
+                              page: state.pagination.page + 1,
+                            },
+                          })
+                        }
+                        disabled={
+                          state.pagination.page * state.pagination.limit >=
+                          state.pagination.total
+                        }
+                        className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <span className="sr-only">Next</span>
+                        <Icon path="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" />
+                      </button>
+                    </nav>
                   </div>
                 </div>
               </div>
-              <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+            </>
+          )}
+        </div>
+
+        {/* Delete Confirmation Modal */}
+        {state.deleteModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg p-6 max-w-md w-full transform transition-all">
+              <div className="flex items-center justify-center mb-4">
+                <div className="bg-red-100 p-3 rounded-full">
+                  <Icon
+                    path="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"
+                    className="h-6 w-6 text-red-600"
+                  />
+                </div>
+              </div>
+              <h3 className="text-lg font-medium text-center mb-2">
+                Delete Plan
+              </h3>
+              <p className="text-sm text-gray-500 text-center mb-6">
+                Are you sure you want to delete this plan? This action cannot be
+                undone.
+              </p>
+              <div className="flex space-x-3">
                 <button
-                  type="button"
-                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:col-start-2 sm:text-sm"
-                  onClick={handleDeleteConfirm}
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Deleting..." : "Delete"}
-                </button>
-                <button
-                  type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm"
-                  onClick={() => setDeleteModal({ isOpen: false, id: null })}
+                  onClick={() => update({ deleteModal: false })}
+                  className="flex-1 border border-gray-300 rounded-md py-2 text-gray-700 hover:bg-gray-50 transition-colors"
                 >
                   Cancel
+                </button>
+                <button
+                  onClick={() => deletePlan(state.deleteModal)}
+                  className="flex-1 bg-red-600 text-white rounded-md py-2 hover:bg-red-700 transition-colors"
+                >
+                  {state.loading ? "Deleting..." : "Delete"}
                 </button>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

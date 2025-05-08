@@ -47,8 +47,9 @@ export default function PlanBookingPage({ params }) {
         );
         setOffice(officeRes.data);
 
-        // Fetch plans
-        const plansRes = await axios.get("http://localhost:4000/api/plans");
+        const plansRes = await axios.get(
+          `http://localhost:4000/api/plans/office/${id}`
+        );
         setPlans(plansRes.data);
 
         setLoading(false);
@@ -245,18 +246,18 @@ export default function PlanBookingPage({ params }) {
   );
 
   const amenities = [
-    { name: "High-speed Wi-Fi", emoji: "📶" },
-    { name: "Comfortable Seating", emoji: "🪑" },
-    { name: "Meeting Rooms", emoji: "👥" },
-    { name: "Private Cabins", emoji: "🚪" },
-    { name: "CCTV Surveillance", emoji: "📹" },
-    { name: "Parking Available", emoji: "🅿️" },
-    { name: "Near Metro Station", emoji: "🚇" },
-    { name: "24/7 Access", emoji: "⏰" },
-    { name: "Air Conditioning", emoji: "❄️" },
-    { name: "Printing Facilities", emoji: "🖨️" },
-    { name: "Coffee/Tea", emoji: "☕" },
-    { name: "Lounge Area", emoji: "🛋️" },
+    { name: "ʜɪɢʜ-ꜱᴘᴇᴇᴅ ᴡɪ-ꜰɪ", emoji: "📶" },
+    { name: "ᴄᴏᴍꜰᴏʀᴛᴀʙʟᴇ ꜱᴇᴀᴛɪɴɢ", emoji: "🪑" },
+    { name: "ᴍᴇᴇᴛɪɴɢ ʀᴏᴏᴍꜱ", emoji: "👥" },
+    { name: "ᴘʀɪᴠᴀᴛᴇ ᴄᴀʙɪɴꜱ", emoji: "🚪" },
+    { name: "ᴄᴄᴛᴠ ꜱᴜʀᴠᴇɪʟʟᴀɴᴄᴇ", emoji: "📹" },
+    { name: "ᴘᴀʀᴋɪɴɢ ᴀᴠᴀɪʟᴀʙʟᴇ", emoji: "🅿️" },
+    { name: "ɴᴇᴀʀ ᴍᴇᴛʀᴏ ꜱᴛᴀᴛɪᴏɴ", emoji: "🚇" },
+    { name: "24/7 ᴀᴄᴄᴇꜱꜱ", emoji: "⏰" },
+    { name: "ᴀɪʀ ᴄᴏɴᴅɪᴛɪᴏɴɪɴɢ", emoji: "❄️" },
+    { name: "ᴘʀɪɴᴛɪɴɢ ꜰᴀᴄɪʟɪᴛɪᴇꜱ", emoji: "🖨️" },
+    { name: "ᴄᴏꜰꜰᴇᴇ/ᴛᴇᴀ", emoji: "☕" },
+    { name: "ʟᴏᴜɴɢᴇ ᴀʀᴇᴀ", emoji: "🛋️" },
   ];
 
   if (loading)
@@ -337,7 +338,6 @@ export default function PlanBookingPage({ params }) {
                       {office.name}
                     </h2>
                     <div className="flex items-center mt-1 text-gray-200">
-                      <BiMap className="mr-1" />
                       <p className="text-sm">{office.address}</p>
                     </div>
                     <div className="mt-3 flex flex-wrap gap-2">
@@ -361,7 +361,7 @@ export default function PlanBookingPage({ params }) {
 
               <div className="p-6">
                 <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                  About this workspace
+                  ᴀʙᴏᴜᴛ ᴛʜɪꜱ ᴡᴏʀᴋꜱᴘᴀᴄᴇ
                 </h3>
                 <p className="text-gray-600 mb-6">
                   {office.description ||
@@ -369,62 +369,36 @@ export default function PlanBookingPage({ params }) {
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="flex items-start">
-                    <div className="p-2.5 bg-blue-50 rounded-lg mr-3 text-blue-600">
-                      <BiBuilding className="text-xl" />
-                    </div>
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-500">
-                        Address:
-                        <p className="text-gray-900 font-medium">
-                          Kamdhenu Commerz, Sector 14, Kharghar, Navi Mumbai{" "}
-                        </p>
-                      </h3>
-                      <p className="text-gray-900 font-medium">
-                        {office.address}
-                      </p>
-                    </div>
-                  </div>
+                  {/* Operating Hours */}
                   <div className="flex items-start">
                     <div className="p-2.5 bg-purple-50 rounded-lg mr-3 text-purple-600">
                       <BiTime className="text-xl" />
                     </div>
                     <div>
                       <h3 className="text-sm font-medium text-gray-500">
-                        Operating Hours
+                      ᴏᴘᴇʀᴀᴛɪɴɢ ʜᴏᴜʀꜱ
                       </h3>
                       <p className="text-gray-900 font-medium">
-                        {office.operatingHours || "9 AM - 9 PM"}
+                        {office.operatingHours || "9 ᴀᴍ - 9 ᴘᴍ"}
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-start">
-                    <div className="p-2.5 bg-green-50 rounded-lg mr-3 text-green-600">
-                      <BiStar className="text-xl" />
-                    </div>
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-500">
-                        Rating
-                      </h3>
-                      <p className="text-gray-900 font-medium">
-                        {office.rating || "4.8"} (120 reviews)
-                      </p>
-                    </div>
-                  </div>
+
+                  {/* Starting Price */}
                   <div className="flex items-start">
                     <div className="p-2.5 bg-orange-50 rounded-lg mr-3 text-orange-600">
                       <BiWallet className="text-xl" />
                     </div>
                     <div>
                       <h3 className="text-sm font-medium text-gray-500">
-                        Starting From
+                      ꜱᴛᴀʀᴛɪɴɢ ᴘʀɪᴄᴇ ꜰʀᴏᴍ
                       </h3>
                       <p className="text-gray-900 font-medium">
                         ₹
                         {plans.length > 0
                           ? Math.min(...plans.map((p) => p.price))
                           : "--"}
-                        /hour
+                        /ʜᴏᴜʀ
                       </p>
                     </div>
                   </div>
@@ -435,7 +409,7 @@ export default function PlanBookingPage({ params }) {
             <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
               <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
                 <span className="mr-2">🏢</span>
-                Amenities & Facilities
+                ᴀᴍᴇɴɪᴛɪᴇꜱ & ꜰᴀᴄɪʟɪᴛɪᴇꜱ
               </h2>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -457,7 +431,7 @@ export default function PlanBookingPage({ params }) {
             <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
               <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
                 <span className="mr-2">💰</span>
-                Pricing Plans
+                ᴘʀɪᴄɪɴɢ ᴘʟᴀɴꜱ
               </h2>
 
               <div className="space-y-8">
@@ -465,7 +439,7 @@ export default function PlanBookingPage({ params }) {
                 <div>
                   <h3 className="text-lg font-medium text-black mb-3 flex items-center">
                     <span className="mr-2">⏱️</span>
-                    Hourly Plans
+                    ʜᴏᴜʀʟʏ ᴘʟᴀɴꜱ
                   </h3>
                   <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
@@ -519,7 +493,7 @@ export default function PlanBookingPage({ params }) {
                 <div>
                   <h3 className="text-lg font-medium text-black mb-3 flex items-center">
                     <span className="mr-2">📅</span>
-                    Daily Plans
+                    ᴅᴀɪʟʏ ᴘʟᴀɴꜱ
                   </h3>
                   <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
@@ -573,7 +547,7 @@ export default function PlanBookingPage({ params }) {
                 <div>
                   <h3 className="text-lg font-medium text-gray-800 mb-3 flex items-center">
                     <span className="mr-2">🏢</span>
-                    Monthly Plans
+                    ᴍᴏɴᴛʜʟʏ ᴘʟᴀɴꜱ
                   </h3>
                   <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
@@ -630,20 +604,20 @@ export default function PlanBookingPage({ params }) {
           <div className="bg-white rounded-xl shadow-sm p-6 h-fit sticky top-8 border border-gray-100">
             <h3 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
               <span className="mr-2">📅</span>
-              Book Your Spot
+              ʙᴏᴏᴋ ʏᴏᴜʀ ꜱᴘᴏᴛ
             </h3>
 
             <div className="space-y-6">
               {/* Plan Category Selection */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Plan Category
+                  ᴘʟᴀɴ ᴄᴀᴛᴇɢᴏʀʏ
                 </label>
                 <div className="grid grid-cols-3 gap-2">
                   {[
-                    { value: "hourly", emoji: "", label: "Hourly" },
-                    { value: "daily", emoji: "", label: "Daily" },
-                    { value: "monthly", emoji: "", label: "Monthly" },
+                    { value: "hourly", emoji: "", label: "ʜᴏᴜʀʟʏ" },
+                    { value: "daily", emoji: "", label: "ᴅᴀɪʟʏ" },
+                    { value: "monthly", emoji: "", label: "ᴍᴏɴᴛʜʟʏ" },
                   ].map((category) => (
                     <button
                       key={category.value}
@@ -678,7 +652,7 @@ export default function PlanBookingPage({ params }) {
               {selectedCategory ? (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Select Plan
+                    ꜱᴇʟᴇᴄᴛ ᴘʟᴀɴ
                   </label>
                   <div className="relative">
                     <select
@@ -698,7 +672,7 @@ export default function PlanBookingPage({ params }) {
                         }
                       }}
                     >
-                      <option value="">-- Choose Plan --</option>
+                      <option value="">ᴄʜᴏᴏꜱᴇ ᴘʟᴀɴ</option>
                       {filteredPlans.map((plan) => (
                         <option key={plan._id} value={plan._id}>
                           {plan.title} - ₹{plan.price.toLocaleString()}
@@ -736,7 +710,7 @@ export default function PlanBookingPage({ params }) {
               ) : (
                 errors.selectedCategory && (
                   <p className="text-sm text-red-600">
-                    Please select a plan category first
+                    ᴘʟᴇᴀꜱᴇ ꜱᴇʟᴇᴄᴛ ᴀ ᴘʟᴀɴ ᴄᴀᴛᴇɢᴏʀʏ ꜰɪʀꜱᴛ
                   </p>
                 )
               )}
@@ -746,7 +720,7 @@ export default function PlanBookingPage({ params }) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Start Date
+                      ꜱᴛᴀʀᴛ ᴅᴀᴛᴇ
                     </label>
                     {selectedCategory === "monthly" ? (
                       <div className="relative">
@@ -805,7 +779,7 @@ export default function PlanBookingPage({ params }) {
                   {selectedCategory === "daily" && (
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        End Date
+                        ᴇɴᴅ ᴅᴀᴛᴇ
                       </label>
                       <div className="relative">
                         <DatePicker
@@ -849,7 +823,7 @@ export default function PlanBookingPage({ params }) {
                 >
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Start Time
+                      ꜱᴛᴀʀᴛ ᴛɪᴍᴇ
                     </label>
                     <div className="relative">
                       <input
@@ -877,7 +851,7 @@ export default function PlanBookingPage({ params }) {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      End Time
+                      ᴇɴᴅ ᴛɪᴍᴇ
                     </label>
                     <div className="relative">
                       <input
@@ -914,7 +888,7 @@ export default function PlanBookingPage({ params }) {
                 >
                   <h4 className="font-semibold text-indigo-800 mb-3 flex items-center">
                     <span className="mr-2">💰</span>
-                    Booking Summary
+                    ʙᴏᴏᴋɪɴɢ ꜱᴜᴍᴍᴀʀʏ
                   </h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
@@ -965,7 +939,7 @@ export default function PlanBookingPage({ params }) {
                     </div>
                     <div className="flex justify-between pt-2 mt-2 border-t border-indigo-100">
                       <span className="text-gray-600 font-semibold">
-                        Total Price:
+                        ᴛᴏᴛᴀʟ ᴘʀɪᴄᴇ:
                       </span>
                       <span className="font-bold text-lg text-indigo-700">
                         ₹{bookingTotal.toLocaleString()}
@@ -988,7 +962,7 @@ export default function PlanBookingPage({ params }) {
                 }
               >
                 <FiShoppingCart className="w-5 h-5 mr-2" />
-                Add to Cart
+                ᴀᴅᴅ ᴛᴏ ᴄᴀʀᴛ
               </button>
             </div>
           </div>

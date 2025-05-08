@@ -3,10 +3,10 @@
 import React, { useState, useEffect } from "react";
 
 const quotes = [
-  "Creativity is intelligence having fun.",
-  "Innovation starts with a spark of creativity.",
-  "Great ideas come from an inspired mind.",
-  "Imagination is the beginning of creation.",
+  "ᴄʀᴇᴀᴛɪᴠɪᴛʏ ɪꜱ ɪɴᴛᴇʟʟɪɢᴇɴᴄᴇ ʜᴀᴠɪɴɢ ꜰᴜɴ.",
+  "ɪɴɴᴏᴠᴀᴛɪᴏɴ ꜱᴛᴀʀᴛꜱ ᴡɪᴛʜ ᴀ ꜱᴘᴀʀᴋ ᴏꜰ ᴄʀᴇᴀᴛɪᴠɪᴛʏ.",
+  "ɢʀᴇᴀᴛ ɪᴅᴇᴀꜱ ᴄᴏᴍᴇ ꜰʀᴏᴍ ᴀɴ ɪɴꜱᴘɪʀᴇᴅ ᴍɪɴᴅ.",
+  "ɪᴍᴀɢɪɴᴀᴛɪᴏɴ ɪꜱ ᴛʜᴇ ʙᴇɢɪɴɴɪɴɢ ᴏꜰ ᴄʀᴇᴀᴛɪᴏɴ.",
 ];
 
 const CreativityBanner = () => {
@@ -36,9 +36,9 @@ const CreativityBanner = () => {
 
       <div className="relative z-10 px-6 py-12 text-center max-w-6xl mx-auto">
         <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-6 leading-tight">
-          Ready To Take A New <br className="hidden md:block" />{" "}
+        ʀᴇᴀᴅʏ ᴛᴏ ᴛᴀᴋᴇ ᴀ ɴᴇᴡ <br className="hidden md:block" />{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">
-            Surge Of Creativity
+          ꜱᴜʀɢᴇ ᴏꜰ ᴄʀᴇᴀᴛɪᴠɪᴛʏ
           </span>
         </h1>
 

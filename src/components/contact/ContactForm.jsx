@@ -198,7 +198,7 @@ const ContactForm = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="p-4 bg-green-500/20 border border-green-400 rounded-lg text-green-100 text-center"
                   >
-                    Thank you! Your message has been sent successfully.
+                    ᴛʜᴀɴᴋ ʏᴏᴜ! ʏᴏᴜʀ ᴍᴇꜱꜱᴀɢᴇ ʜᴀꜱ ʙᴇᴇɴ ꜱᴇɴᴛ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ.
                   </motion.div>
                 )}
               </form>
@@ -216,20 +216,20 @@ const ContactForm = () => {
               {[
                 {
                   icon: <MapPin size={28} className="text-purple-300" />,
-                  title: "Address",
-                  info: "350 Fifth Avenue, 34th floor, New York City",
+                  title: "ᴀᴅᴅʀᴇꜱꜱ",
+                  info: "1907 - 1910 ᴋᴀᴍᴅʜᴇɴᴜ ᴄᴏᴍᴍᴇʀᴢ, ꜱᴇᴄᴛᴏʀ 14, ᴋʜᴀʀɢʜᴀʀ, ɴᴀᴠɪ ᴍᴜᴍʙᴀɪ",
                 },
                 {
                   icon: <Mail size={28} className="text-purple-300" />,
-                  title: "Email",
-                  info: "customer.support@gmail.com",
-                  link: "mailto:customer.support@gmail.com",
+                  title: "ᴇᴍᴀɪʟ",
+                  info: "ᴍɴᴇꜱʜᴋ480@ɢᴍᴀɪʟ.ᴄᴏᴍ",
+                  link: "mailto:customer.ᴍɴᴇꜱʜᴋ480@ɢᴍᴀɪʟ.ᴄᴏᴍ",
                 },
                 {
                   icon: <Phone size={28} className="text-purple-300" />,
-                  title: "Call Us",
-                  info: "+987 654 3210 OR +012 345 6789",
-                  link: "tel:+9876543210",
+                  title: "ᴄᴀʟʟ ᴜꜱ",
+                  info: "+91 7707076831",
+                  link: "tel:+97707076831",
                 },
               ].map((item, index) => (
                 <motion.div

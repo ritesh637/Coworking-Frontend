@@ -10,8 +10,8 @@ import {
 const teamMembers = [
   {
     id: 1,
-    name: "Sophia Anderson",
-    position: "CEO & Founder",
+    name: "ꜱᴏᴘʜɪᴀ ᴀɴᴅᴇʀꜱᴏɴ",
+    position: "ᴄᴇᴏ & ꜰᴏᴜɴᴅᴇʀ",
     image:
       "https://demo2.wpopal.com/co-workshop/wp-content/uploads/2018/11/bannercw1-2.jpg",
     facebook: "#",
@@ -20,8 +20,8 @@ const teamMembers = [
   },
   {
     id: 2,
-    name: "James Carter",
-    position: "CTO",
+    name: "ᴊᴀᴍᴇꜱ ᴄᴀʀᴛᴇʀ",
+    position: "ᴄᴛᴏ",
     image:
       "https://demo2.wpopal.com/co-workshop/wp-content/uploads/2018/11/h6-g1.jpg",
     facebook: "#",
@@ -30,8 +30,8 @@ const teamMembers = [
   },
   {
     id: 3,
-    name: "Emma Roberts",
-    position: "Marketing Director",
+    name: "ᴇᴍᴍᴀ ʀᴏʙᴇʀᴛꜱ",
+    position: "ᴍᴀʀᴋᴇᴛɪɴɢ ᴅɪʀᴇᴄᴛᴏʀ",
     image:
       "http://hub2b.like-themes.com/wp-content/uploads/2018/02/gallery_09.jpg",
     facebook: "#",
@@ -40,8 +40,8 @@ const teamMembers = [
   },
   {
     id: 4,
-    name: "Daniel White",
-    position: "Lead Developer",
+    name: "ᴅᴀɴɪᴇʟ ᴡʜɪᴛᴇ",
+    position: "ʟᴇᴀᴅ ᴅᴇᴠᴇʟᴏᴘᴇʀ",
     image:
       "https://kits.krakenbox.net/brisk/wp-content/uploads/sites/4/2025/01/millennial-male-and-female-colleagues-with-digital-5JLN5UC.jpg",
     facebook: "#",
@@ -119,15 +119,15 @@ const TeamSection = () => {
       <div className="container mx-auto max-w-7xl">
         <div className="text-center mb-12">
           <span className="inline-block px-3 py-1 text-sm font-semibold text-purple-200 bg-purple-800 rounded-full mb-4">
-            Our Team
+            ᴏᴜʀ ᴛᴇᴀᴍ
           </span>
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Meet Our Expert <span className="text-green-300">Professional</span>{" "}
-            Team
+            ᴍᴇᴇᴛ ᴏᴜʀ ᴇxᴘᴇʀᴛ <span className="text-green-300">ᴘʀᴏꜰᴇꜱꜱɪᴏɴᴀʟ</span>{" "}
+            ᴛᴇᴀᴍ
           </h2>
           <p className="max-w-2xl mx-auto text-purple-200">
-            Our team of experienced professionals is dedicated to delivering
-            exceptional results for your business.
+            ᴏᴜʀ ᴛᴇᴀᴍ ᴏꜰ ᴇxᴘᴇʀɪᴇɴᴄᴇᴅ ᴘʀᴏꜰᴇꜱꜱɪᴏɴᴀʟꜱ ɪꜱ ᴅᴇᴅɪᴄᴀᴛᴇᴅ ᴛᴏ ᴅᴇʟɪᴠᴇʀɪɴɢ
+            ᴇxᴄᴇᴘᴛɪᴏɴᴀʟ ʀᴇꜱᴜʟᴛꜱ ꜰᴏʀ ʏᴏᴜʀ ʙᴜꜱɪɴᴇꜱꜱ.
           </p>
         </div>
 
@@ -139,7 +139,7 @@ const TeamSection = () => {
 
         <div className="text-center mt-12">
           <button className="px-8 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-green-500/30">
-            View All Team Members
+          ᴠɪᴇᴡ ᴀʟʟ ᴛᴇᴀᴍ ᴍᴇᴍʙᴇʀꜱ
           </button>
         </div>
       </div>

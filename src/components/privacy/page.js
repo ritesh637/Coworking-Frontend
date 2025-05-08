@@ -16,8 +16,8 @@ const PrivacyPolicy = () => {
       >
         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
         <div className="z-10">
-          <h1 className="text-3xl md:text-5xl font-bold">Privacy Policy</h1>
-          <p className="text-lg mt-2">Please read it carefully</p>
+          <h1 className="text-3xl md:text-5xl font-bold">ᴘʀɪᴠᴀᴄʏ ᴘᴏʟɪᴄʏ</h1>
+          <p className="text-lg mt-2">ᴘʟᴇᴀꜱᴇ ʀᴇᴀᴅ ɪᴛ ᴄᴀʀᴇꜰᴜʟʟʏ</p>
         </div>
       </div>
 
@@ -26,29 +26,29 @@ const PrivacyPolicy = () => {
         <section className="space-y-8">
           {[
             {
-              title: "1. Information We Collect",
+              title: "1. ɪɴꜰᴏʀᴍᴀᴛɪᴏɴ ᴡᴇ ᴄᴏʟʟᴇᴄᴛ",
               description:
-                "We collect personal information such as name, email, phone number, and payment details.",
+                "ᴡᴇ ᴄᴏʟʟᴇᴄᴛ ᴘᴇʀꜱᴏɴᴀʟ ɪɴꜰᴏʀᴍᴀᴛɪᴏɴ ꜱᴜᴄʜ ᴀꜱ ɴᴀᴍᴇ, ᴇᴍᴀɪʟ, ᴘʜᴏɴᴇ ɴᴜᴍʙᴇʀ, ᴀɴᴅ ᴘᴀʏᴍᴇɴᴛ ᴅᴇᴛᴀɪʟꜱ.",
             },
             {
-              title: "2. How We Use Your Information",
+              title: "2. ʜᴏᴡ ᴡᴇ ᴜꜱᴇ ʏᴏᴜʀ ɪɴꜰᴏʀᴍᴀᴛɪᴏɴ",
               description:
-                "We use your data to provide and improve our services, ensure security, and communicate updates.",
+                "ᴡᴇ ᴜꜱᴇ ʏᴏᴜʀ ᴅᴀᴛᴀ ᴛᴏ ᴘʀᴏᴠɪᴅᴇ ᴀɴᴅ ɪᴍᴘʀᴏᴠᴇ ᴏᴜʀ ꜱᴇʀᴠɪᴄᴇꜱ, ᴇɴꜱᴜʀᴇ ꜱᴇᴄᴜʀɪᴛʏ, ᴀɴᴅ ᴄᴏᴍᴍᴜɴɪᴄᴀᴛᴇ ᴜᴘᴅᴀᴛᴇꜱ.",
             },
             {
-              title: "3. Sharing of Information",
+              title: "3. ꜱʜᴀʀɪɴɢ ᴏꜰ ɪɴꜰᴏʀᴍᴀᴛɪᴏɴ",
               description:
-                "We do not sell your data. We may share information with trusted partners for service improvement.",
+                "ᴡᴇ ᴅᴏ ɴᴏᴛ ꜱᴇʟʟ ʏᴏᴜʀ ᴅᴀᴛᴀ. ᴡᴇ ᴍᴀʏ ꜱʜᴀʀᴇ ɪɴꜰᴏʀᴍᴀᴛɪᴏɴ ᴡɪᴛʜ ᴛʀᴜꜱᴛᴇᴅ ᴘᴀʀᴛɴᴇʀꜱ ꜰᴏʀ ꜱᴇʀᴠɪᴄᴇ ɪᴍᴘʀᴏᴠᴇᴍᴇɴᴛ.",
             },
             {
-              title: "4. Security Measures",
+              title: "4. ꜱᴇᴄᴜʀɪᴛʏ ᴍᴇᴀꜱᴜʀᴇꜱ",
               description:
-                "We take strong security measures to protect your information from unauthorized access.",
+                "ᴡᴇ ᴛᴀᴋᴇ ꜱᴛʀᴏɴɢ ꜱᴇᴄᴜʀɪᴛʏ ᴍᴇᴀꜱᴜʀᴇꜱ ᴛᴏ ᴘʀᴏᴛᴇᴄᴛ ʏᴏᴜʀ ɪɴꜰᴏʀᴍᴀᴛɪᴏɴ ꜰʀᴏᴍ ᴜɴᴀᴜᴛʜᴏʀɪᴢᴇᴅ ᴀᴄᴄᴇꜱꜱ.",
             },
             {
-              title: "5. Policy Updates",
+              title: "5. ᴘᴏʟɪᴄʏ ᴜᴘᴅᴀᴛᴇꜱ",
               description:
-                "We may update this policy periodically. Any changes will be posted on our website.",
+                "ᴡᴇ ᴍᴀʏ ᴜᴘᴅᴀᴛᴇ ᴛʜɪꜱ ᴘᴏʟɪᴄʏ ᴘᴇʀɪᴏᴅɪᴄᴀʟʟʏ. ᴀɴʏ ᴄʜᴀɴɢᴇꜱ ᴡɪʟʟ ʙᴇ ᴘᴏꜱᴛᴇᴅ ᴏɴ ᴏᴜʀ ᴡᴇʙꜱɪᴛᴇ.",
             },
           ].map((item, index) => (
             <div key={index} className="group">
@@ -66,17 +66,17 @@ const PrivacyPolicy = () => {
         <div className="mt-12 bg-gray-100 dark:bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg">
           <h2 className="text-2xl font-semibold mb-4">Contact Us</h2>
           <p className="text-gray-700 dark:text-gray-300 mb-6">
-            If you have any questions, feel free to reach out to us.
+            ɪꜰ ʏᴏᴜ ʜᴀᴠᴇ ᴀɴʏ Qᴜᴇꜱᴛɪᴏɴꜱ, ꜰᴇᴇʟ ꜰʀᴇᴇ ᴛᴏ ʀᴇᴀᴄʜ ᴏᴜᴛ ᴛᴏ ᴜꜱ.
           </p>
 
           <div className="space-y-4">
             <div className="flex items-start gap-3">
               <MapPin className="text-blue-600" />
               <div>
-                <p className="font-semibold">Office Address</p>
+                <p className="font-semibold">ᴏꜰꜰɪᴄᴇ ᴀᴅᴅʀᴇꜱꜱ</p>
                 <p className="text-sm">
-                  1910, Kamdhenu Commerz, next to Raghunath Vihar, Block-J,
-                  Sector14, Kharghar, Navi Mumbai, 410210
+                  1907-1910, ᴋᴀᴍᴅʜᴇɴᴜ ᴄᴏᴍᴍᴇʀᴢ, ɴᴇxᴛ ᴛᴏ ʀᴀɢʜᴜɴᴀᴛʜ ᴠɪʜᴀʀ, ʙʟᴏᴄᴋ-ᴊ,
+                  ꜱᴇᴄᴛᴏʀ14, ᴋʜᴀʀɢʜᴀʀ, ɴᴀᴠɪ ᴍᴜᴍʙᴀɪ, 410210
                 </p>
               </div>
             </div>
@@ -84,7 +84,7 @@ const PrivacyPolicy = () => {
             <div className="flex items-start gap-3">
               <Phone className="text-green-600" />
               <div>
-                <p className="font-semibold">Contact Number</p>
+                <p className="font-semibold">ᴄᴏɴᴛᴀᴄᴛ ɴᴜᴍʙᴇʀ</p>
                 <p className="text-sm">+91 7707076831</p>
               </div>
             </div>
@@ -93,7 +93,7 @@ const PrivacyPolicy = () => {
               <Mail className="text-red-500" />
               <div>
                 <p className="font-semibold">Email</p>
-                <p className="text-sm text-blue-600">support@yourdomain.com</p>
+                <p className="text-sm text-blue-600">ᴍɴᴇꜱʜᴋ480@ɢᴍᴀɪʟ.ᴄᴏᴍ</p>
               </div>
             </div>
           </div>

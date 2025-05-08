@@ -20,27 +20,27 @@ const HomeMain = () => {
   const features = [
     {
       icon: "🏢",
-      title: "Premium Spaces",
+      title: "ᴘʀᴇᴍɪᴜᴍ ꜱᴘᴀᴄᴇꜱ",
       description:
-        "State-of-the-art facilities designed for comfort and productivity.",
+        "ꜱᴛᴀᴛᴇ-ᴏꜰ-ᴛʜᴇ-ᴀʀᴛ ꜰᴀᴄɪʟɪᴛɪᴇꜱ ᴅᴇꜱɪɢɴᴇᴅ ꜰᴏʀ ᴄᴏᴍꜰᴏʀᴛ ᴀɴᴅ ᴘʀᴏᴅᴜᴄᴛɪᴠɪᴛʏ.",
     },
     {
       icon: "🤝",
-      title: "Networking",
+      title: "ɴᴇᴛᴡᴏʀᴋɪɴɢ",
       description:
-        "Connect with like-minded professionals and grow your network.",
+        "ᴄᴏɴɴᴇᴄᴛ ᴡɪᴛʜ ʟɪᴋᴇ-ᴍɪɴᴅᴇᴅ ᴘʀᴏꜰᴇꜱꜱɪᴏɴᴀʟꜱ ᴀɴᴅ ɢʀᴏᴡ ʏᴏᴜʀ ɴᴇᴛᴡᴏʀᴋ.",
     },
     {
       icon: "☕",
-      title: "Amenities",
+      title: "ᴀᴍᴇɴɪᴛɪᴇꜱ",
       description:
-        "Enjoy premium amenities including cafes, lounges, and meeting rooms.",
+        "ᴇɴᴊᴏʏ ᴘʀᴇᴍɪᴜᴍ ᴀᴍᴇɴɪᴛɪᴇꜱ ɪɴᴄʟᴜᴅɪɴɢ ᴄᴀꜰᴇꜱ, ʟᴏᴜɴɢᴇꜱ, ᴀɴᴅ ᴍᴇᴇᴛɪɴɢ ʀᴏᴏᴍꜱ.",
     },
     {
       icon: "🚀",
-      title: "Growth",
+      title: "ɢʀᴏᴡᴛʜ",
       description:
-        "Resources and events to help your business scale new heights.",
+        "ʀᴇꜱᴏᴜʀᴄᴇꜱ ᴀɴᴅ ᴇᴠᴇɴᴛꜱ ᴛᴏ ʜᴇʟᴘ ʏᴏᴜʀ ʙᴜꜱɪɴᴇꜱꜱ ꜱᴄᴀʟᴇ ɴᴇᴡ ʜᴇɪɢʜᴛꜱ.",
     },
   ];
 
@@ -51,7 +51,7 @@ const HomeMain = () => {
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:bg-white focus:px-4 focus:py-2 focus:rounded dark:focus:bg-gray-800"
       >
-        Skip to content
+        ꜱᴋɪᴘ ᴛᴏ ᴄᴏɴᴛᴇɴᴛ
       </a>
 
       {/* Main Content */}
@@ -67,7 +67,7 @@ const HomeMain = () => {
             transition={{ duration: 0.6 }}
             className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-300"
           >
-            Revolutionize The Way An Office Functions.
+            ʀᴇᴠᴏʟᴜᴛɪᴏɴɪᴢᴇ ᴛʜᴇ ᴡᴀʏ ᴀɴ ᴏꜰꜰɪᴄᴇ ꜰᴜɴᴄᴛɪᴏɴꜱ.
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
@@ -75,8 +75,8 @@ const HomeMain = () => {
             transition={{ delay: 0.3, duration: 0.5 }}
             className="mt-6 text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto"
           >
-            Coworking allows professionals from various companies to share
-            office space, promoting collaboration and cost-efficiency.
+            ᴄᴏᴡᴏʀᴋɪɴɢ ᴀʟʟᴏᴡꜱ ᴘʀᴏꜰᴇꜱꜱɪᴏɴᴀʟꜱ ꜰʀᴏᴍ ᴠᴀʀɪᴏᴜꜱ ᴄᴏᴍᴘᴀɴɪᴇꜱ ᴛᴏ ꜱʜᴀʀᴇ
+            ᴏꜰꜰɪᴄᴇ ꜱᴘᴀᴄᴇ, ᴘʀᴏᴍᴏᴛɪɴɢ ᴄᴏʟʟᴀʙᴏʀᴀᴛɪᴏɴ ᴀɴᴅ ᴄᴏꜱᴛ-ᴇꜰꜰɪᴄɪᴇɴᴄʏ.
           </motion.p>
         </section>
 
@@ -89,11 +89,11 @@ const HomeMain = () => {
             className="w-full lg:w-1/2 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8"
           >
             <h2 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-6">
-              Get Your{" "}
+              ɢᴇᴛ ʏᴏᴜʀ{" "}
               <span className="text-purple-600 dark:text-purple-400">
-                Perfect Space
+                ᴘᴇʀꜰᴇᴄᴛ ꜱᴘᴀᴄᴇ
               </span>{" "}
-              Now
+              ɴᴏᴡ
             </h2>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div>
@@ -101,7 +101,7 @@ const HomeMain = () => {
                   htmlFor="location"
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                 >
-                  Location
+                  ʟᴏᴄᴀᴛɪᴏɴ
                 </label>
                 <select
                   id="location"
@@ -114,11 +114,11 @@ const HomeMain = () => {
                       : "border-gray-300 dark:border-gray-600"
                   } dark:bg-gray-700 dark:text-white`}
                 >
-                  <option value="">Select location</option>
-                  <option value="Navi Mumbai">Navi Mumbai</option>
-                  <option value="Noida">Noida</option>
-                  <option value="Ahmedabad">Ahmedabad</option>
-                  <option value="Bengaluru">Bengaluru</option>
+                  <option value="">ꜱᴇʟᴇᴄᴛ ʟᴏᴄᴀᴛɪᴏɴ</option>
+                  <option value="Navi Mumbai">ɴᴀᴠɪ ᴍᴜᴍʙᴀɪ</option>
+                  <option value="Noida">ɴᴏɪᴅᴀ </option>
+                  <option value="Ahmedabad">ᴀʜᴍᴇᴅᴀʙᴀᴅ</option>
+                  <option value="Bengaluru">ʙᴇɴɢᴀʟᴜʀᴜ</option>
                 </select>
                 {errors.location && (
                   <p className="text-red-500 text-sm mt-1">
@@ -132,7 +132,7 @@ const HomeMain = () => {
                   htmlFor="workspaceType"
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                 >
-                  Workspace Type
+                  ᴡᴏʀᴋꜱᴘᴀᴄᴇ ᴛʏᴘᴇ
                 </label>
                 <select
                   id="workspaceType"
@@ -145,11 +145,11 @@ const HomeMain = () => {
                       : "border-gray-300 dark:border-gray-600"
                   } dark:bg-gray-700 dark:text-white`}
                 >
-                  <option value="">Select workspace type</option>
-                  <option value="Private Office">Private Office</option>
-                  <option value="Global Office">Global Office</option>
-                  <option value="Hot Desk">Hot Desk</option>
-                  <option value="Meeting Room">Meeting Room</option>
+                  <option value="">ꜱᴇʟᴇᴄᴛ ᴡᴏʀᴋꜱᴘᴀᴄᴇ ᴛʏᴘᴇ</option>
+                  <option value="Private Office">ᴘʀɪᴠᴀᴛᴇ ᴏꜰꜰɪᴄᴇ</option>
+                  <option value="Global Office">ɢʟᴏʙᴀʟ ᴏꜰꜰɪᴄᴇ</option>
+                  <option value="Hot Desk">ʜᴏᴛ ᴅᴇꜱᴋ</option>
+                  <option value="Meeting Room">ᴍᴇᴇᴛɪɴɢ ʀᴏᴏᴍ</option>
                 </select>
                 {errors.workspaceType && (
                   <p className="text-red-500 text-sm mt-1">
@@ -163,7 +163,7 @@ const HomeMain = () => {
                   htmlFor="duration"
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                 >
-                  Duration Of Stay
+                  ᴅᴜʀᴀᴛɪᴏɴ ᴏꜰ ꜱᴛᴀʏ
                 </label>
                 <input
                   type="date"
@@ -190,7 +190,7 @@ const HomeMain = () => {
                 type="submit"
                 className="w-full bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 text-white py-3 px-6 rounded-lg font-semibold shadow-md transition-all duration-300"
               >
-                Find Your Space
+                ꜰɪɴᴅ ʏᴏᴜʀ ꜱᴘᴀᴄᴇ
               </motion.button>
             </form>
           </motion.div>
@@ -213,10 +213,10 @@ const HomeMain = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
               <div className="absolute bottom-6 left-6 text-white">
                 <h3 className="text-xl md:text-2xl font-bold">
-                  Collaborative Workspaces
+                  ᴄᴏʟʟᴀʙᴏʀᴀᴛɪᴠᴇ ᴡᴏʀᴋꜱᴘᴀᴄᴇꜱ
                 </h3>
                 <p className="text-sm md:text-base">
-                  Designed for productivity and creativity
+                  ᴅᴇꜱɪɢɴᴇᴅ ꜰᴏʀ ᴘʀᴏᴅᴜᴄᴛɪᴠɪᴛʏ ᴀɴᴅ ᴄʀᴇᴀᴛɪᴠɪᴛʏ
                 </p>
               </div>
             </div>
@@ -226,11 +226,11 @@ const HomeMain = () => {
         {/* Features Section */}
         <section className="mb-16 md:mb-24">
           <h2 className="text-3xl font-bold text-center mb-4 text-gray-800 dark:text-white">
-            Why Choose Us
+            ᴡʜʏ ᴄʜᴏᴏꜱᴇ ᴜꜱ
           </h2>
           <p className="text-lg text-center text-gray-600 dark:text-gray-300 mb-12 max-w-2xl mx-auto">
-            Our spaces are designed to help you do your best work and connect
-            with amazing people.
+            ᴏᴜʀ ꜱᴘᴀᴄᴇꜱ ᴀʀᴇ ᴅᴇꜱɪɢɴᴇᴅ ᴛᴏ ʜᴇʟᴘ ʏᴏᴜ ᴅᴏ ʏᴏᴜʀ ʙᴇꜱᴛ ᴡᴏʀᴋ ᴀɴᴅ ᴄᴏɴɴᴇᴄᴛ
+            ᴡɪᴛʜ ᴀᴍᴀᴢɪɴɢ ᴘᴇᴏᴘʟᴇ.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -272,8 +272,8 @@ const HomeMain = () => {
               transition={{ duration: 0.6 }}
               className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6"
             >
-              Ready To Take A <span className="text-purple-300">New Surge</span>{" "}
-              Of Creativity
+              ʀᴇᴀᴅʏ ᴛᴏ ᴛᴀᴋᴇ ᴀ <span className="text-purple-300">ɴᴇᴡ ꜱᴜʀɢᴇ</span>{" "}
+              ᴏꜰ ᴄʀᴇᴀᴛɪᴠɪᴛʏ
             </motion.h2>
             <motion.p
               initial={{ opacity: 0 }}
@@ -281,8 +281,8 @@ const HomeMain = () => {
               transition={{ delay: 0.3, duration: 0.5 }}
               className="text-lg md:text-xl mb-8 text-gray-200"
             >
-              Join our vibrant community of innovators and creators in spaces
-              designed to inspire.
+              ᴊᴏɪɴ ᴏᴜʀ ᴠɪʙʀᴀɴᴛ ᴄᴏᴍᴍᴜɴɪᴛʏ ᴏꜰ ɪɴɴᴏᴠᴀᴛᴏʀꜱ ᴀɴᴅ ᴄʀᴇᴀᴛᴏʀꜱ ɪɴ ꜱᴘᴀᴄᴇꜱ
+              ᴅᴇꜱɪɢɴᴇᴅ ᴛᴏ ɪɴꜱᴘɪʀᴇ.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
@@ -295,7 +295,7 @@ const HomeMain = () => {
                 href="/booknow"
                 className="inline-block bg-white text-purple-600 hover:bg-purple-50 px-8 py-4 rounded-lg font-semibold text-lg shadow-lg transition-all duration-300"
               >
-                Book a Space Today
+                ʙᴏᴏᴋ ᴀ ꜱᴘᴀᴄᴇ ᴛᴏᴅᴀʏ
               </motion.a>
             </motion.div>
           </div>

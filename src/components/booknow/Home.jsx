@@ -296,7 +296,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              Our <span className="text-blue-600">Mumbai</span> Locations
+              ᴏᴜʀ <span className="text-blue-600">ᴍᴜᴍʙᴀɪ</span> ʟᴏᴄᴀᴛɪᴏɴꜱ
             </h2>
           </div>
 
@@ -315,14 +315,14 @@ export default function Home() {
           <div className="mt-16 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl p-8 sm:p-10 text-center">
             <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4"></h3>
             <p className="text-lg text-purple-100 mb-6 max-w-2xl mx-auto">
-              We have more locations coming soon. Contact us for custom
-              solutions.
+            ᴡᴇ ʜᴀᴠᴇ ᴍᴏʀᴇ ʟᴏᴄᴀᴛɪᴏɴꜱ ᴄᴏᴍɪɴɢ ꜱᴏᴏɴ. ᴄᴏɴᴛᴀᴄᴛ ᴜꜱ ꜰᴏʀ ᴄᴜꜱᴛᴏᴍ
+            ꜱᴏʟᴜᴛɪᴏɴꜱ.
             </p>
             <button
               onClick={() => setShowContact(true)}
               className="bg-white text-purple-600 hover:bg-gray-100 font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105"
             >
-              Contact Our Team
+              ᴄᴏɴᴛᴀᴄᴛ ᴏᴜʀ ᴛᴇᴀᴍ
             </button>
           </div>
         </div>

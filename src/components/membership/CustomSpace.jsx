@@ -4,10 +4,10 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import { motion } from "framer-motion";
 
 const quotes = [
-  "Need A Custom Space?",
-  "Tailor-Made Offices Just for You",
-  "Workspaces That Fit Your Needs",
-  "Flexible Solutions, Unlimited Potential",
+  "ɴᴇᴇᴅ ᴀ ᴄᴜꜱᴛᴏᴍ ꜱᴘᴀᴄᴇ?",
+  "ᴛᴀɪʟᴏʀ-ᴍᴀᴅᴇ ᴏꜰꜰɪᴄᴇꜱ ᴊᴜꜱᴛ ꜰᴏʀ ʏᴏᴜ",
+  "ᴡᴏʀᴋꜱᴘᴀᴄᴇꜱ ᴛʜᴀᴛ ꜰɪᴛ ʏᴏᴜʀ ɴᴇᴇᴅꜱ",
+  "ꜰʟᴇxɪʙʟᴇ ꜱᴏʟᴜᴛɪᴏɴꜱ, ᴜɴʟɪᴍɪᴛᴇᴅ ᴘᴏᴛᴇɴᴛɪᴀʟ",
 ];
 
 const CustomSpace = () => {
@@ -97,8 +97,8 @@ const CustomSpace = () => {
           </h2>
 
           <p className="text-lg md:text-xl text-purple-100 mb-8 md:mb-10 max-w-2xl mx-auto">
-            We create perfect work environments tailored to your business
-            requirements and company culture.
+            ᴡᴇ ᴄʀᴇᴀᴛᴇ ᴘᴇʀꜰᴇᴄᴛ ᴡᴏʀᴋ ᴇɴᴠɪʀᴏɴᴍᴇɴᴛꜱ ᴛᴀɪʟᴏʀᴇᴅ ᴛᴏ ʏᴏᴜʀ ʙᴜꜱɪɴᴇꜱꜱ
+            ʀᴇQᴜɪʀᴇᴍᴇɴᴛꜱ ᴀɴᴅ ᴄᴏᴍᴘᴀɴʏ ᴄᴜʟᴛᴜʀᴇ.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -106,7 +106,7 @@ const CustomSpace = () => {
               onClick={() => setShowContactModal(true)}
               className="bg-white text-purple-700 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg"
             >
-              Contact Us
+              ᴄᴏɴᴛᴀᴄᴛ ᴜꜱ
             </button>
           </div>
         </div>

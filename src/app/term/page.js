@@ -14,9 +14,11 @@ const TermsAndConditions = () => {
         }}
       >
         <div className="bg-black/50 w-full h-full flex flex-col items-center justify-center">
-          <h1 className="text-4xl font-bold">Terms & Conditions</h1>
+          <h1 className="text-4xl font-bold">
+            ᴛᴇʀᴍꜱ & ᴄᴏɴᴅɪᴛɪᴏɴꜱᴛᴇʀᴍꜱ & ᴄᴏɴᴅɪᴛɪᴏɴꜱ
+          </h1>
           <p className="text-lg mt-2">
-            Please read carefully before using our services
+            ᴘʟᴇᴀꜱᴇ ʀᴇᴀᴅ ᴄᴀʀᴇꜰᴜʟʟʏ ʙᴇꜰᴏʀᴇ ᴜꜱɪɴɢ ᴏᴜʀ ꜱᴇʀᴠɪᴄᴇꜱ
           </p>
         </div>
       </div>
@@ -26,88 +28,88 @@ const TermsAndConditions = () => {
         <section className="space-y-6">
           <div className="group">
             <h2 className="text-2xl font-semibold text-gray-900 transition-all duration-300 group-hover:text-blue-600">
-              1. Membership & Access
+              1. ᴍᴇᴍʙᴇʀꜱʜɪᴘ & ᴀᴄᴄᴇꜱꜱ
             </h2>
             <p className="text-gray-700 group-hover:translate-x-1 transition-all duration-300">
-              Members must register before using the facilities. Access is
-              limited to designated hours based on membership plans.
+              ᴍᴇᴍʙᴇʀꜱ ᴍᴜꜱᴛ ʀᴇɢɪꜱᴛᴇʀ ʙᴇꜰᴏʀᴇ ᴜꜱɪɴɢ ᴛʜᴇ ꜰᴀᴄɪʟɪᴛɪᴇꜱ. ᴀᴄᴄᴇꜱꜱ ɪꜱ
+              ʟɪᴍɪᴛᴇᴅ ᴛᴏ ᴅᴇꜱɪɢɴᴀᴛᴇᴅ ʜᴏᴜʀꜱ ʙᴀꜱᴇᴅ ᴏɴ ᴍᴇᴍʙᴇʀꜱʜɪᴘ ᴘʟᴀɴꜱ.
             </p>
           </div>
 
           <div className="group">
             <h2 className="text-2xl font-semibold text-gray-900 transition-all duration-300 group-hover:text-blue-600">
-              2. Use of Facilities
+              2. ᴜꜱᴇ ᴏꜰ ꜰᴀᴄɪʟɪᴛɪᴇꜱ
             </h2>
             <p className="text-gray-700 group-hover:translate-x-1 transition-all duration-300">
-              Respect shared spaces and maintain cleanliness. Unauthorized
-              modifications or misuse of equipment are prohibited.
+              ʀᴇꜱᴘᴇᴄᴛ ꜱʜᴀʀᴇᴅ ꜱᴘᴀᴄᴇꜱ ᴀɴᴅ ᴍᴀɪɴᴛᴀɪɴ ᴄʟᴇᴀɴʟɪɴᴇꜱꜱ. ᴜɴᴀᴜᴛʜᴏʀɪᴢᴇᴅ
+              ᴍᴏᴅɪꜰɪᴄᴀᴛɪᴏɴꜱ ᴏʀ ᴍɪꜱᴜꜱᴇ ᴏꜰ ᴇQᴜɪᴘᴍᴇɴᴛ ᴀʀᴇ ᴘʀᴏʜɪʙɪᴛᴇᴅ.
             </p>
           </div>
 
           <div className="group">
             <h2 className="text-2xl font-semibold text-gray-900 transition-all duration-300 group-hover:text-blue-600">
-              3. Payment & Cancellation
+              3. ᴘᴀʏᴍᴇɴᴛ & ᴄᴀɴᴄᴇʟʟᴀᴛɪᴏɴ
             </h2>
             <p className="text-gray-700 group-hover:translate-x-1 transition-all duration-300">
-              Membership fees must be paid in advance. Cancellations require
-              prior notice as per policy.
+              ᴍᴇᴍʙᴇʀꜱʜɪᴘ ꜰᴇᴇꜱ ᴍᴜꜱᴛ ʙᴇ ᴘᴀɪᴅ ɪɴ ᴀᴅᴠᴀɴᴄᴇ. ᴄᴀɴᴄᴇʟʟᴀᴛɪᴏɴꜱ ʀᴇQᴜɪʀᴇ
+              ᴘʀɪᴏʀ ɴᴏᴛɪᴄᴇ ᴀꜱ ᴘᴇʀ ᴘᴏʟɪᴄʏ.
             </p>
           </div>
 
           <div className="group">
             <h2 className="text-2xl font-semibold text-gray-900 transition-all duration-300 group-hover:text-blue-600">
-              4. Conduct & Etiquette
+              4. ᴄᴏɴᴅᴜᴄᴛ & ᴇᴛɪQᴜᴇᴛᴛᴇ
             </h2>
             <p className="text-gray-700 group-hover:translate-x-1 transition-all duration-300">
-              Maintain a professional environment. Harassment, loud
-              disturbances, or disruptive behavior will not be tolerated.
+              ᴍᴀɪɴᴛᴀɪɴ ᴀ ᴘʀᴏꜰᴇꜱꜱɪᴏɴᴀʟ ᴇɴᴠɪʀᴏɴᴍᴇɴᴛ. ʜᴀʀᴀꜱꜱᴍᴇɴᴛ, ʟᴏᴜᴅ
+              ᴅɪꜱᴛᴜʀʙᴀɴᴄᴇꜱ, ᴏʀ ᴅɪꜱʀᴜᴘᴛɪᴠᴇ ʙᴇʜᴀᴠɪᴏʀ ᴡɪʟʟ ɴᴏᴛ ʙᴇ ᴛᴏʟᴇʀᴀᴛᴇᴅ.
             </p>
           </div>
 
           <div className="group">
             <h2 className="text-2xl font-semibold text-gray-900 transition-all duration-300 group-hover:text-blue-600">
-              5. Liability & Security
+              5. ʟɪᴀʙɪʟɪᴛʏ & ꜱᴇᴄᴜʀɪᴛʏ
             </h2>
             <p className="text-gray-700 group-hover:translate-x-1 transition-all duration-300">
-              We are not responsible for lost or stolen items. Members must
-              ensure their belongings are secure.
+              ᴡᴇ ᴀʀᴇ ɴᴏᴛ ʀᴇꜱᴘᴏɴꜱɪʙʟᴇ ꜰᴏʀ ʟᴏꜱᴛ ᴏʀ ꜱᴛᴏʟᴇɴ ɪᴛᴇᴍꜱ. ᴍᴇᴍʙᴇʀꜱ ᴍᴜꜱᴛ
+              ᴇɴꜱᴜʀᴇ ᴛʜᴇɪʀ ʙᴇʟᴏɴɢɪɴɢꜱ ᴀʀᴇ ꜱᴇᴄᴜʀᴇ.
             </p>
           </div>
 
           <div className="group">
             <h2 className="text-2xl font-semibold text-gray-900 transition-all duration-300 group-hover:text-blue-600">
-              6. Amendments
+              6. ᴀᴍᴇɴᴅᴍᴇɴᴛꜱ
             </h2>
             <p className="text-gray-700 group-hover:translate-x-1 transition-all duration-300">
-              We reserve the right to update these terms at any time. Continued
-              use of the space implies agreement to new terms.
+              ᴡᴇ ʀᴇꜱᴇʀᴠᴇ ᴛʜᴇ ʀɪɢʜᴛ ᴛᴏ ᴜᴘᴅᴀᴛᴇ ᴛʜᴇꜱᴇ ᴛᴇʀᴍꜱ ᴀᴛ ᴀɴʏ ᴛɪᴍᴇ. ᴄᴏɴᴛɪɴᴜᴇᴅ
+              ᴜꜱᴇ ᴏꜰ ᴛʜᴇ ꜱᴘᴀᴄᴇ ɪᴍᴘʟɪᴇꜱ ᴀɢʀᴇᴇᴍᴇɴᴛ ᴛᴏ ɴᴇᴡ ᴛᴇʀᴍꜱ.
             </p>
           </div>
         </section>
 
         {/* Contact Details */}
         <div className="mt-10 bg-gray-100 p-6 rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold text-gray-900">Contact Us</h2>
+          <h2 className="text-2xl font-semibold text-gray-900">ᴄᴏɴᴛᴀᴄᴛ ᴜꜱ</h2>
           <p className="text-gray-700 mt-2">
-            If you have any questions, feel free to reach out to us.
+            ɪꜰ ʏᴏᴜ ʜᴀᴠᴇ ᴀɴʏ Qᴜᴇꜱᴛɪᴏɴꜱ, ꜰᴇᴇʟ ꜰʀᴇᴇ ᴛᴏ ʀᴇᴀᴄʜ ᴏᴜᴛ ᴛᴏ ᴜꜱ.
           </p>
 
           <div className="mt-4">
-            <p className="text-gray-900 font-semibold">📍 Office Address:</p>
+            <p className="text-gray-900 font-semibold">📍 ᴏꜰꜰɪᴄᴇ ᴀᴅᴅʀᴇꜱꜱ:</p>
             <p className="text-gray-700">
-              1910, Kamdhenu Commerz, next to Raghunath Vihar, Block-J ,
-              Raghunath Vihar, Sector14, Kharghar, Navi Mumbai, 410210
+              1907-1910, ᴋᴀᴍᴅʜᴇɴᴜ ᴄᴏᴍᴍᴇʀᴢ, ɴᴇxᴛ ᴛᴏ ʀᴀɢʜᴜɴᴀᴛʜ ᴠɪʜᴀʀ, ʙʟᴏᴄᴋ-ᴊ
+              ʀᴀɢʜᴜɴᴀᴛʜ ᴠɪʜᴀʀ, ꜱᴇᴄᴛᴏʀ14, ᴋʜᴀʀɢʜᴀʀ, ɴᴀᴠɪ ᴍᴜᴍʙᴀɪ, 410210
             </p>
           </div>
 
           <div className="mt-4">
-            <p className="text-gray-900 font-semibold">📞 Contact Number:</p>
+            <p className="text-gray-900 font-semibold">📞 ᴄᴏɴᴛᴀᴄᴛ ɴᴜᴍʙᴇʀ:</p>
             <p className="text-gray-700">+91 7707076831</p>
           </div>
 
           <div className="mt-4">
-            <p className="text-gray-900 font-semibold">📧 Email:</p>
-            <p className="text-blue-600 font-semibold">support@.com</p>
+            <p className="text-gray-900 font-semibold">📧 ᴇᴍᴀɪʟ:</p>
+            <p className="text-blue-600 font-semibold">ᴍɴᴇꜱʜᴋ480@ɢᴍᴀɪʟ.ᴄᴏᴍ</p>
           </div>
         </div>
       </div>

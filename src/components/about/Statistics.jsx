@@ -5,22 +5,22 @@ const statisticsData = [
   {
     icon: <Users size={36} className="text-purple-600" />,
     value: "500+",
-    label: "Meeting Rooms",
+    label: "ᴍᴇᴇᴛɪɴɢ ʀᴏᴏᴍꜱ",
   },
   {
     icon: <Briefcase size={36} className="text-purple-600" />,
     value: "5,000",
-    label: "Startup Mentors",
+    label: "ꜱᴛᴀʀᴛᴜᴘ ᴍᴇɴᴛᴏʀꜱ",
   },
   {
     icon: <Landmark size={36} className="text-purple-600" />,
     value: "100+",
-    label: "Event Spaces",
+    label: "ᴇᴠᴇɴᴛ ꜱᴘᴀᴄᴇꜱ",
   },
   {
     icon: <Flag size={36} className="text-purple-600" />,
     value: "36+",
-    label: "Countries",
+    label: "ᴄᴏᴜɴᴛʀɪᴇꜱ",
   },
 ];
 

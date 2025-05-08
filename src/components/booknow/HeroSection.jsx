@@ -123,15 +123,15 @@ const HeroSection = () => {
             className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-tight"
             variants={itemVariants}
           >
-            <span className="block mb-4">Discover Our</span>
+            <span className="block mb-4">ᴅɪꜱᴄᴏᴠᴇʀ ᴏᴜʀ</span>
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-red-400 to-orange-400">
               <TypeAnimation
                 sequence={[
-                  "Premium Locations",
+                  "ᴘʀᴇᴍɪᴜᴍ ʟᴏᴄᴀᴛɪᴏɴꜱ",
                   2000,
-                  "Creative Spaces",
+                  "ᴄʀᴇᴀᴛɪᴠᴇ ꜱᴘᴀᴄᴇꜱ",
                   2000,
-                  "Productive Offices",
+                  "ᴘʀᴏᴅᴜᴄᴛɪᴠᴇ ᴏꜰꜰɪᴄᴇꜱ",
                   2000,
                 ]}
                 wrapper="span"
@@ -145,9 +145,9 @@ const HeroSection = () => {
             className="text-xl sm:text-2xl md:text-3xl text-white/90 max-w-3xl mx-auto font-medium"
             variants={itemVariants}
           >
-            Beautifully designed workspaces that inspire{" "}
-            <span className="text-orange-300">creativity</span> and{" "}
-            <span className="text-blue-300">productivity</span>
+            ʙᴇᴀᴜᴛɪꜰᴜʟʟʏ ᴅᴇꜱɪɢɴᴇᴅ ᴡᴏʀᴋꜱᴘᴀᴄᴇꜱ ᴛʜᴀᴛ ɪɴꜱᴘɪʀᴇ{" "}
+            <span className="text-orange-300">ᴄʀᴇᴀᴛɪᴠɪᴛʏ</span>ᴀɴᴅ{" "}
+            <span className="text-blue-300">ᴘʀᴏᴅᴜᴄᴛɪᴠɪᴛʏ</span>
           </motion.p>
 
           {/* CTA Button */}
@@ -162,7 +162,7 @@ const HeroSection = () => {
                   animate={{ x: isHovering ? 5 : 0 }}
                   transition={{ type: "spring", stiffness: 500 }}
                 >
-                  Explore Spaces
+                  ᴇxᴘʟᴏʀᴇ ꜱᴘᴀᴄᴇꜱ
                 </motion.span>
                 <motion.div
                   animate={{
@@ -222,7 +222,7 @@ const HeroSection = () => {
             animate={{ y: [0, -5, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
-            Scroll to explore
+            ꜱᴄʀᴏʟʟ ᴛᴏ ᴇxᴘʟᴏʀᴇ
           </motion.span>
           <div className="w-10 h-16 border-2 border-white/50 rounded-full flex justify-center relative">
             <motion.div
@@ -248,22 +248,22 @@ const HeroSection = () => {
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-white">
           {[
             {
-              label: "Global Locations",
+              label: "ɢʟᴏʙᴀʟ ʟᴏᴄᴀᴛɪᴏɴS",
               value: "20+",
               gradient: "from-pink-400 to-orange-400",
             },
             {
-              label: "Member Satisfaction",
+              label: "ᴍᴇᴍʙᴇʀ ꜱᴀᴛɪꜱꜰᴀᴄᴛɪᴏɴ",
               value: "98%",
               gradient: "from-blue-400 to-cyan-500",
             },
             {
-              label: "Offices Booked",
+              label: "ᴏꜰꜰɪᴄᴇꜱ ʙᴏᴏᴋᴇᴅ",
               value: "1200+",
               gradient: "from-green-400 to-teal-500",
             },
             {
-              label: "Workspaces",
+              label: "ᴡᴏʀᴋꜱᴘᴀᴄᴇꜱ",
               value: "5000+",
               gradient: "from-purple-400 to-indigo-500",
             },

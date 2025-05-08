@@ -13,7 +13,7 @@ const ExperiencedTeam = () => {
         transition={{ duration: 0.5 }}
         className="text-3xl md:text-4xl font-bold text-center mb-4"
       >
-        Gallery
+        ɢᴀʟʟᴇʀʏ
       </motion.h2>
       <motion.p
         initial={{ opacity: 0 }}
@@ -21,7 +21,7 @@ const ExperiencedTeam = () => {
         transition={{ delay: 0.2, duration: 0.5 }}
         className="text-center text-black mb-8 max-w-2xl mx-auto"
       >
-        Explore our inspiring work environments
+        ᴇxᴘʟᴏʀᴇ ᴏᴜʀ ɪɴꜱᴘɪʀɪɴɢ ᴡᴏʀᴋ ᴇɴᴠɪʀᴏɴᴍᴇɴᴛꜱ
       </motion.p>
 
       {/* Team Members Grid */}
