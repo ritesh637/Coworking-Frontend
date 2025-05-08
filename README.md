@@ -77,14 +77,12 @@ Vercel Deployment Docs
 
 📸 Screenshots
 
-
+JUST OPEN THIS IN YOUR BROWSER TO SEE THE PROJECT INTERFACE.
 ![image](https://github.com/user-attachments/assets/a278d76d-b924-485a-ada7-99bc3b827a39)
 
 ![image](https://github.com/user-attachments/assets/65cb1661-3e83-4969-8699-3973fd37b07a) 
 
 🧑‍🎓 Author
 Name: RITESH
-
 GitHub: @ritesh637
-
 LinkedIn: RITESH KUMAR GOSWAMI
